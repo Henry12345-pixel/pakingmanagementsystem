@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ucc.parkingsystem.controller.VehicleExitController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12.0"
+              style="-fx-padding: 12; -fx-background-color: #1e6b52;">
+            <Button text="&lt; Back" onAction="#onBackClick"/>
+            <Label text="Record Vehicle Exit"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="15.0" style="-fx-padding: 15;">
+
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Search plate:"/>
+                <TextField fx:id="searchField" promptText="Type part of a plate number"
+                           prefWidth="250.0"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Record Exit for Selected" onAction="#onRecordExitClick"/>
+            </HBox>
+
+            <Label fx:id="messageLabel" wrapText="true"/>
+
+            <TableView fx:id="parkedTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="plateColumn" text="Plate No."/>
+                    <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="slotColumn" text="Slot"/>
+                    <TableColumn fx:id="entryColumn" text="Entry Time"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
