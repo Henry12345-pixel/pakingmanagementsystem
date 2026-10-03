@@ -107,6 +107,35 @@ public class ParkingRecordDAO {
         return parked;
     }
 
+    // Every parking visit, newest first. exit_time is null for vehicles still parked.
+    public static List<ParkingRecord> getAllRecords() throws SQLException {
+        String sql = """
+        SELECT r.record_id, r.plate_number, v.type_name, s.slot_number,
+               r.entry_time, r.exit_time
+        FROM parking_records r
+        JOIN vehicle_types v ON r.type_id = v.type_id
+        JOIN parking_slots s ON r.slot_id = s.slot_id
+        ORDER BY r.entry_time DESC, r.record_id DESC
+        """;
+
+        List<ParkingRecord> records = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                records.add(new ParkingRecord(
+                        rs.getInt("record_id"),
+                        rs.getString("plate_number"),
+                        rs.getString("type_name"),
+                        rs.getString("slot_number"),
+                        rs.getString("entry_time"),
+                        rs.getString("exit_time")));   // null if still parked
+            }
+        }
+        return records;
+    }
+
     // Records the exit and frees the slot, as one transaction.
 // Returns false if this record already had an exit time.
     // Records the exit and frees the slot, as one transaction.

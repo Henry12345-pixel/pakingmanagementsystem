@@ -4,6 +4,8 @@ import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
 import com.ucc.parkingsystem.model.Session;
 import com.ucc.parkingsystem.model.User;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -11,41 +13,45 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AdminDashboardController {
 
-    // Each name must match an fx:id in admin-dashboard-view.fxml
     @FXML private Label welcomeLabel;
     @FXML private Label totalLabel;
     @FXML private Label availableLabel;
     @FXML private Label occupiedLabel;
+    @FXML private Label lastUpdatedLabel;
 
     @FXML private TableView<ParkingSlot> slotsTable;
     @FXML private TableColumn<ParkingSlot, String> slotNumberColumn;
     @FXML private TableColumn<ParkingSlot, String> typeColumn;
+    @FXML private TableColumn<ParkingSlot, String> floorColumn;
     @FXML private TableColumn<ParkingSlot, String> statusColumn;
     @FXML private TableColumn<ParkingSlot, String> vehicleColumn;
+
+    private static final DateTimeFormatter CLOCK_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private Timeline autoRefresh;
 
     @FXML
     public void initialize() {
         User user = Session.getCurrentUser();
         welcomeLabel.setText("Logged in as: " + user.getFullName() + " (" + user.getRole() + ")");
 
-        // Tell each column which value from a ParkingSlot to show.
-        // "data.getValue()" is the ParkingSlot for that row.
         slotNumberColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getSlotNumber()));
         typeColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getTypeName()));
+        floorColumn.setCellValueFactory(data -> {
+            String floor = data.getValue().getFloorLevel();
+            String formatted = floor.charAt(0) + floor.substring(1).toLowerCase();
+            return new SimpleStringProperty(formatted);
+        });
         statusColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStatus()));
         vehicleColumn.setCellValueFactory(data -> {
@@ -57,7 +63,19 @@ public class AdminDashboardController {
         startAutoRefresh();
     }
 
-    // Reads the slots from the database, then updates the cards and the table.
+    // Calls loadData() every 5 seconds while this screen is showing.
+    private void startAutoRefresh() {
+        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            if (slotsTable.getScene() == null || slotsTable.getScene().getWindow() == null) {
+                autoRefresh.stop();
+                return;
+            }
+            loadData();
+        }));
+        autoRefresh.setCycleCount(Timeline.INDEFINITE);
+        autoRefresh.play();
+    }
+
     private void loadData() {
         try {
             List<ParkingSlot> slots = ParkingSlotDAO.getAllSlots();
@@ -85,20 +103,6 @@ public class AdminDashboardController {
         }
     }
 
-    // Calls loadData() every 5 seconds while this screen is showing.
-    private void startAutoRefresh() {
-        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            // If this screen was replaced (Logout, or opening another screen), stop the timer.
-            if (slotsTable.getScene() == null || slotsTable.getScene().getWindow() == null) {
-                autoRefresh.stop();
-                return;
-            }
-            loadData();
-        }));
-        autoRefresh.setCycleCount(Timeline.INDEFINITE);
-        autoRefresh.play();
-    }
-
     @FXML
     private void onRefreshClick() {
         loadData();
@@ -109,7 +113,6 @@ public class AdminDashboardController {
         Navigator.logout(welcomeLabel);
     }
 
-    // The three screens below do not exist yet, so we show a message for now.
     @FXML
     private void onManageStaffClick() {
         try {
@@ -122,7 +125,7 @@ public class AdminDashboardController {
     @FXML
     private void onManageSlotsClick() {
         try {
-            Navigator.goToAdminOnly(welcomeLabel, "manage-slots-view.fxml", "Manage Parking Slots", 800, 550);
+            Navigator.goToAdminOnly(welcomeLabel, "manage-slots-view.fxml", "Manage Parking Slots", 850, 550);
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -130,14 +133,10 @@ public class AdminDashboardController {
 
     @FXML
     private void onRecordsClick() {
-        showComingSoon("Parking Records");
+        try {
+            Navigator.goToAdminOnly(welcomeLabel, "parking-records-view.fxml", "Parking Records", 900, 600);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
-
-    private void showComingSoon(String screenName) {
-
-    }
-    @FXML private Label lastUpdatedLabel;
-
-    private static final DateTimeFormatter CLOCK_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private Timeline autoRefresh;
 }

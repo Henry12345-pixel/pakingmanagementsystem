@@ -12,33 +12,35 @@ import java.util.List;
 
 public class UserDAO {
 
-    // Returns the User if the login is correct, or null if it is not.
     public static User login(String username, String password) throws SQLException {
 
         String sql = """
-            SELECT u.user_id, u.username, u.full_name, r.role_name
-            FROM users u
-            JOIN roles r ON u.role_id = r.role_id
-            WHERE u.username = ? AND u.password = ? AND u.is_active = 1
-            """;
+        SELECT u.user_id, u.username, u.password, u.full_name, r.role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        WHERE u.username = ? AND u.is_active = 1
+        """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, username);   // fills the first ?
-            ps.setString(2, password);   // fills the second ?
+            ps.setString(1, username);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {   // a row came back, so the login is correct
-                    return new User(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("full_name"),
-                            rs.getString("role_name"));
+                if (rs.next()) {
+                    String storedHash = rs.getString("password");
+
+                    if (PasswordUtil.verify(password, storedHash)) {
+                        return new User(
+                                rs.getInt("user_id"),
+                                rs.getString("username"),
+                                rs.getString("full_name"),
+                                rs.getString("role_name"));
+                    }
                 }
             }
         }
-        return null;   // no matching row
+        return null;   // either the username doesn't exist, or the password didn't match
     }
     // Returns every STAFF account (not Admins), for the Manage Staff screen.
     public static List<User> getAllStaff() throws SQLException {
@@ -77,7 +79,7 @@ public class UserDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, PasswordUtil.hash(password));   // hash before storing
             ps.setString(3, fullName);
             ps.executeUpdate();
         }
@@ -89,12 +91,11 @@ public class UserDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, newPassword);
+            ps.setString(1, PasswordUtil.hash(newPassword));   // hash before storing
             ps.setInt(2, userId);
             ps.executeUpdate();
         }
     }
-
     // Turns an account on or off. A deactivated user can't log in (see Step 8's login SQL).
     public static void setActive(int userId, boolean active) throws SQLException {
         String sql = "UPDATE users SET is_active = ? WHERE user_id = ?";

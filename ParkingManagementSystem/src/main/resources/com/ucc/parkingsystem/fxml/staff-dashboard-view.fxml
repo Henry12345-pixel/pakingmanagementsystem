@@ -19,7 +19,6 @@
                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="welcomeLabel" style="-fx-text-fill: white;"/>
-            <Label fx:id="lastUpdatedLabel" style="-fx-text-fill: gray;"/>
             <Button text="Logout" onAction="#onLogoutClick"/>
         </HBox>
     </top>
@@ -27,7 +26,7 @@
     <center>
         <VBox spacing="15.0" style="-fx-padding: 15;">
 
-            <!-- The three cards, identical pattern to the Admin dashboard -->
+            <!-- The three cards -->
             <HBox spacing="15.0">
                 <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
                       style="-fx-background-color: #ecf0f1; -fx-padding: 12; -fx-background-radius: 6;">
@@ -49,19 +48,21 @@
                 </VBox>
             </HBox>
 
-            <!-- Staff actions: no Manage Staff / Manage Slots here -->
-            <HBox spacing="10.0">
+            <!-- Staff actions -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
                 <Button text="Record Entry" onAction="#onRecordEntryClick"/>
                 <Button text="Record Exit" onAction="#onRecordExitClick"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lastUpdatedLabel" style="-fx-text-fill: gray;"/>
                 <Button text="Refresh" onAction="#onRefreshClick"/>
             </HBox>
 
-            <!-- Same table pattern as Admin -->
+            <!-- Slot table -->
             <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="slotNumberColumn" text="Slot"/>
                     <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="floorColumn" text="Floor"/>
                     <TableColumn fx:id="statusColumn" text="Status"/>
                     <TableColumn fx:id="vehicleColumn" text="Vehicle (Plate No.)"/>
                 </columns>

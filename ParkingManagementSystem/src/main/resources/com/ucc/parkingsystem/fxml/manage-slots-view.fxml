@@ -36,6 +36,9 @@
                 <Label text="Vehicle Type:"/>
                 <ChoiceBox fx:id="typeChoiceBox" prefWidth="120.0"/>
 
+                <Label text="Floor:"/>
+                <ChoiceBox fx:id="floorChoiceBox" prefWidth="100.0"/>
+
                 <Button text="Add" onAction="#onAddClick"/>
                 <Button text="Update Selected" onAction="#onUpdateClick"/>
                 <Button text="Delete Selected" onAction="#onDeleteClick"/>
@@ -49,6 +52,7 @@
                 <columns>
                     <TableColumn fx:id="slotNumberColumn" text="Slot"/>
                     <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="floorColumn" text="Floor"/>
                     <TableColumn fx:id="statusColumn" text="Status"/>
                 </columns>
                 <columnResizePolicy>

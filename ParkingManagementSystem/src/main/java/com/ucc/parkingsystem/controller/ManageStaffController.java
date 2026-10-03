@@ -60,6 +60,14 @@ public class ManageStaffController {
             return;
         }
 
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Add new staff account for " + fullName + " (username: " + username + ")?");
+        confirm.showAndWait();
+
+        if (confirm.getResult() != ButtonType.OK) {
+            return;
+        }
+
         try {
             UserDAO.addStaff(username, password, fullName);
             messageLabel.setText("");
@@ -75,7 +83,6 @@ public class ManageStaffController {
             }
         }
     }
-
     @FXML
     private void onResetPasswordClick() {
         if (selectedStaff == null) {
@@ -85,6 +92,14 @@ public class ManageStaffController {
         String newPassword = newPasswordField.getText();
         if (newPassword.isEmpty()) {
             messageLabel.setText("Type a new password first.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Reset the password for " + selectedStaff.getFullName() + "?");
+        confirm.showAndWait();
+
+        if (confirm.getResult() != ButtonType.OK) {
             return;
         }
 
@@ -112,6 +127,16 @@ public class ManageStaffController {
             messageLabel.setText("Select a staff member from the table first.");
             return;
         }
+
+        String action = active ? "Activate" : "Deactivate";
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                action + " the account for " + selectedStaff.getFullName() + "?");
+        confirm.showAndWait();
+
+        if (confirm.getResult() != ButtonType.OK) {
+            return;
+        }
+
         try {
             UserDAO.setActive(selectedStaff.getUserId(), active);
             messageLabel.setText("");

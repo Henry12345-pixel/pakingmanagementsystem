@@ -4,22 +4,20 @@ import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
 import com.ucc.parkingsystem.model.Session;
 import com.ucc.parkingsystem.model.User;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class StaffDashboardController {
 
@@ -27,12 +25,17 @@ public class StaffDashboardController {
     @FXML private Label totalLabel;
     @FXML private Label availableLabel;
     @FXML private Label occupiedLabel;
+    @FXML private Label lastUpdatedLabel;
 
     @FXML private TableView<ParkingSlot> slotsTable;
     @FXML private TableColumn<ParkingSlot, String> slotNumberColumn;
     @FXML private TableColumn<ParkingSlot, String> typeColumn;
+    @FXML private TableColumn<ParkingSlot, String> floorColumn;
     @FXML private TableColumn<ParkingSlot, String> statusColumn;
     @FXML private TableColumn<ParkingSlot, String> vehicleColumn;
+
+    private static final DateTimeFormatter CLOCK_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private Timeline autoRefresh;
 
     @FXML
     public void initialize() {
@@ -43,6 +46,11 @@ public class StaffDashboardController {
                 data -> new SimpleStringProperty(data.getValue().getSlotNumber()));
         typeColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getTypeName()));
+        floorColumn.setCellValueFactory(data -> {
+            String floor = data.getValue().getFloorLevel();
+            String formatted = floor.charAt(0) + floor.substring(1).toLowerCase();
+            return new SimpleStringProperty(formatted);
+        });
         statusColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStatus()));
         vehicleColumn.setCellValueFactory(data -> {
@@ -52,6 +60,19 @@ public class StaffDashboardController {
 
         loadData();
         startAutoRefresh();
+    }
+
+    // Calls loadData() every 5 seconds while this screen is showing.
+    private void startAutoRefresh() {
+        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            if (slotsTable.getScene() == null || slotsTable.getScene().getWindow() == null) {
+                autoRefresh.stop();
+                return;
+            }
+            loadData();
+        }));
+        autoRefresh.setCycleCount(Timeline.INDEFINITE);
+        autoRefresh.play();
     }
 
     private void loadData() {
@@ -80,19 +101,6 @@ public class StaffDashboardController {
             lastUpdatedLabel.setText("Could not refresh data.");
         }
     }
-    // Calls loadData() every 5 seconds while this screen is showing.
-    private void startAutoRefresh() {
-        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            // If this screen was replaced (Logout, or opening another screen), stop the timer.
-            if (slotsTable.getScene() == null || slotsTable.getScene().getWindow() == null) {
-                autoRefresh.stop();
-                return;
-            }
-            loadData();
-        }));
-        autoRefresh.setCycleCount(Timeline.INDEFINITE);
-        autoRefresh.play();
-    }
 
     @FXML
     private void onRefreshClick() {
@@ -104,16 +112,15 @@ public class StaffDashboardController {
         Navigator.logout(welcomeLabel);
     }
 
-    // Built in Step 13
     @FXML
     private void onRecordEntryClick() {
         try {
-            Navigator.goTo(welcomeLabel, "vehicle-entry-view.fxml", "Record Vehicle Entry", 500, 450);
+            Navigator.goTo(welcomeLabel, "vehicle-entry-view.fxml", "Record Vehicle Entry", 500, 480);
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
     }
-    // Built in Step 15
+
     @FXML
     private void onRecordExitClick() {
         try {
@@ -122,8 +129,4 @@ public class StaffDashboardController {
             e.printStackTrace();
         }
     }
-    @FXML private Label lastUpdatedLabel;
-
-    private static final DateTimeFormatter CLOCK_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private Timeline autoRefresh;
 }

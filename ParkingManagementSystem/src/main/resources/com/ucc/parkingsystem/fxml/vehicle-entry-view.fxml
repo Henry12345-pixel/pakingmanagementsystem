@@ -28,6 +28,9 @@
             <Label text="Vehicle Type:"/>
             <ChoiceBox fx:id="typeChoiceBox" prefWidth="250.0"/>
 
+            <Label text="Floor:"/>
+            <ChoiceBox fx:id="floorChoiceBox" prefWidth="250.0"/>
+
             <Label text="Available Slot:"/>
             <ChoiceBox fx:id="slotChoiceBox" prefWidth="250.0"/>
 

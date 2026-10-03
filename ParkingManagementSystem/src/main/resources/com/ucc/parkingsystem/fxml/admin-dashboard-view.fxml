@@ -49,7 +49,7 @@
             </HBox>
 
             <!-- The menu buttons -->
-            <HBox spacing="10.0">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
                 <Button text="Manage Staff" onAction="#onManageStaffClick"/>
                 <Button text="Manage Slots" onAction="#onManageSlotsClick"/>
                 <Button text="Parking Records" onAction="#onRecordsClick"/>
@@ -63,6 +63,7 @@
                 <columns>
                     <TableColumn fx:id="slotNumberColumn" text="Slot"/>
                     <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="floorColumn" text="Floor"/>
                     <TableColumn fx:id="statusColumn" text="Status"/>
                     <TableColumn fx:id="vehicleColumn" text="Vehicle (Plate No.)"/>
                 </columns>

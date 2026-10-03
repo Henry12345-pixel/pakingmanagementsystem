@@ -4,9 +4,8 @@ import com.ucc.parkingsystem.database.ParkingRecordDAO;
 import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.database.VehicleTypeDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
-
 import com.ucc.parkingsystem.model.VehicleType;
-
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -20,6 +19,7 @@ import java.util.Map;
 public class VehicleEntryController {
 
     @FXML private ChoiceBox<String> typeChoiceBox;
+    @FXML private ChoiceBox<String> floorChoiceBox;
     @FXML private ChoiceBox<String> slotChoiceBox;
     @FXML private TextField plateField;
     @FXML private Label messageLabel;
@@ -41,24 +41,28 @@ public class VehicleEntryController {
             showError("Could not load vehicle types.");
         }
 
-        // Whenever the vehicle type changes, reload the matching available slots.
-        typeChoiceBox.setOnAction(event -> loadSlotsForSelectedType());
+        floorChoiceBox.setItems(FXCollections.observableArrayList("GROUND", "UPPER", "LOWER"));
+
+        // Reload slots whenever EITHER the type OR the floor changes.
+        typeChoiceBox.setOnAction(event -> loadSlotsForSelection());
+        floorChoiceBox.setOnAction(event -> loadSlotsForSelection());
     }
 
-    private void loadSlotsForSelectedType() {
+    private void loadSlotsForSelection() {
         String type = typeChoiceBox.getValue();
+        String floor = floorChoiceBox.getValue();
         slotChoiceBox.getItems().clear();
         slotIdsByNumber.clear();
 
-        if (type == null) {
-            return;
+        if (type == null || floor == null) {
+            return;   // wait until both are chosen
         }
 
         try {
-            List<ParkingSlot> slots = ParkingSlotDAO.getAvailableSlotsByType(type);
+            List<ParkingSlot> slots = ParkingSlotDAO.getAvailableSlots(type, floor);
 
             if (slots.isEmpty()) {
-                showError("No available " + type + " slots right now.");
+                showError("No available " + type + " slots on the " + floor.toLowerCase() + " floor.");
                 return;
             }
             messageLabel.setText("");
@@ -77,11 +81,16 @@ public class VehicleEntryController {
     @FXML
     private void onRecordEntryClick() {
         String type = typeChoiceBox.getValue();
+        String floor = floorChoiceBox.getValue();
         String slotNumber = slotChoiceBox.getValue();
         String plate = plateField.getText().trim();
 
         if (type == null) {
             showError("Choose a vehicle type.");
+            return;
+        }
+        if (floor == null) {
+            showError("Choose a floor.");
             return;
         }
         if (slotNumber == null) {
@@ -93,9 +102,8 @@ public class VehicleEntryController {
             return;
         }
 
-        int typeId = typeIdsByName.get(type);           // looked up by name, not by position
+        int typeId = typeIdsByName.get(type);
         int slotId = slotIdsByNumber.get(slotNumber);
-
 
         try {
             boolean recorded = ParkingRecordDAO.recordEntry(plate, typeId, slotId);
@@ -111,9 +119,9 @@ public class VehicleEntryController {
             slotChoiceBox.setValue(null);
             String message = messageLabel.getText();
             String style = messageLabel.getStyle();
-            loadSlotsForSelectedType();          // refresh the list either way
+            loadSlotsForSelection();
             if (!message.isEmpty() && messageLabel.getText().isEmpty()) {
-                messageLabel.setStyle(style);    // keep our message visible after the refresh
+                messageLabel.setStyle(style);
                 messageLabel.setText(message);
             }
 

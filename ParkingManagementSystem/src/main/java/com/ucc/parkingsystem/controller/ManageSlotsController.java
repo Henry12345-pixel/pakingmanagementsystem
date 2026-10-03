@@ -14,11 +14,13 @@ public class ManageSlotsController {
 
     @FXML private TextField slotNumberField;
     @FXML private ChoiceBox<String> typeChoiceBox;
+    @FXML private ChoiceBox<String> floorChoiceBox;
     @FXML private Label messageLabel;
 
     @FXML private TableView<ParkingSlot> slotsTable;
     @FXML private TableColumn<ParkingSlot, String> slotNumberColumn;
     @FXML private TableColumn<ParkingSlot, String> typeColumn;
+    @FXML private TableColumn<ParkingSlot, String> floorColumn;
     @FXML private TableColumn<ParkingSlot, String> statusColumn;
 
     // Remembers which slot is selected for Update/Delete, or null if none.
@@ -30,8 +32,12 @@ public class ManageSlotsController {
                 data -> new SimpleStringProperty(data.getValue().getSlotNumber()));
         typeColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getTypeName()));
+        floorColumn.setCellValueFactory(
+                data -> new SimpleStringProperty(formatFloor(data.getValue().getFloorLevel())));
         statusColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStatus()));
+
+        floorChoiceBox.setItems(FXCollections.observableArrayList("GROUND", "UPPER", "LOWER"));
 
         // When a table row is clicked, copy its values into the form.
         slotsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldRow, newRow) -> {
@@ -39,11 +45,17 @@ public class ManageSlotsController {
             if (newRow != null) {
                 slotNumberField.setText(newRow.getSlotNumber());
                 typeChoiceBox.setValue(newRow.getTypeName());
+                floorChoiceBox.setValue(newRow.getFloorLevel());
             }
         });
 
         loadTypes();
         loadSlots();
+    }
+
+    private String formatFloor(String floorLevel) {
+        if (floorLevel == null) return "";
+        return floorLevel.charAt(0) + floorLevel.substring(1).toLowerCase();
     }
 
     private void loadTypes() {
@@ -68,14 +80,15 @@ public class ManageSlotsController {
     private void onAddClick() {
         String slotNumber = slotNumberField.getText().trim();
         String type = typeChoiceBox.getValue();
+        String floor = floorChoiceBox.getValue();
 
-        if (slotNumber.isEmpty() || type == null) {
-            messageLabel.setText("Enter a slot number and choose a vehicle type.");
+        if (slotNumber.isEmpty() || type == null || floor == null) {
+            messageLabel.setText("Enter a slot number, vehicle type, and floor.");
             return;
         }
 
         try {
-            ParkingSlotDAO.addSlot(slotNumber, type);
+            ParkingSlotDAO.addSlot(slotNumber, type, floor);
             messageLabel.setText("");
             onClearClick();
             loadSlots();
@@ -101,14 +114,15 @@ public class ManageSlotsController {
 
         String slotNumber = slotNumberField.getText().trim();
         String type = typeChoiceBox.getValue();
+        String floor = floorChoiceBox.getValue();
 
-        if (slotNumber.isEmpty() || type == null) {
-            messageLabel.setText("Enter a slot number and choose a vehicle type.");
+        if (slotNumber.isEmpty() || type == null || floor == null) {
+            messageLabel.setText("Enter a slot number, vehicle type, and floor.");
             return;
         }
 
         try {
-            ParkingSlotDAO.updateSlot(selectedSlot.getSlotId(), slotNumber, type);
+            ParkingSlotDAO.updateSlot(selectedSlot.getSlotId(), slotNumber, type, floor);
             messageLabel.setText("");
             onClearClick();
             loadSlots();
@@ -154,6 +168,7 @@ public class ManageSlotsController {
     private void onClearClick() {
         slotNumberField.clear();
         typeChoiceBox.setValue(null);
+        floorChoiceBox.setValue(null);
         slotsTable.getSelectionModel().clearSelection();
         selectedSlot = null;
     }

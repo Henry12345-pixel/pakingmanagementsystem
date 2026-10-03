@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-
+import javafx.scene.control.ButtonType;
 import java.io.IOException;
 
 // Changes the screen shown in the window. Every controller uses this.
@@ -46,12 +46,19 @@ public class Navigator {
     }
 
     // Clears the login and returns to the login screen.
+// Asks for confirmation, then clears the login and returns to the login screen.
     public static void logout(Node currentNode) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to log out?");
+        confirm.showAndWait();
+
+        if (confirm.getResult() != ButtonType.OK) {
+            return;   // Cancel was clicked, or the pop-up was closed: stay on the current screen
+        }
+
         Session.logout();
         try {
             goTo(currentNode, "login-view.fxml", "Parking Management System - Login", 400, 350);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-}
+    }}

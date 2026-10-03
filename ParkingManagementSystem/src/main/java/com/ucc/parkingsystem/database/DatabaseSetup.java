@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 public class DatabaseSetup {
 
@@ -53,12 +54,14 @@ public class DatabaseSetup {
             )
             """);
 
-        // 4. parking_slots: each slot is for one vehicle type
+        // 4. parking_slots: each slot is for one vehicle type AND one floor level
         stmt.execute("""
             CREATE TABLE IF NOT EXISTS parking_slots (
                 slot_id     INTEGER PRIMARY KEY AUTOINCREMENT,
                 slot_number TEXT NOT NULL UNIQUE,
                 type_id     INTEGER NOT NULL,
+                floor_level TEXT NOT NULL DEFAULT 'GROUND'
+                            CHECK (floor_level IN ('GROUND', 'UPPER', 'LOWER')),
                 status      TEXT NOT NULL DEFAULT 'AVAILABLE'
                             CHECK (status IN ('AVAILABLE', 'OCCUPIED')),
                 FOREIGN KEY (type_id) REFERENCES vehicle_types(type_id)
@@ -94,69 +97,51 @@ public class DatabaseSetup {
         stmt.execute("INSERT OR IGNORE INTO vehicle_types (type_name) VALUES ('4-Wheel')");
 
         // One Admin and one Staff account so we can log in during testing
-        stmt.execute("""
-            INSERT OR IGNORE INTO users (username, password, full_name, role_id)
-            VALUES ('admin', 'admin123', 'System Administrator',
-                    (SELECT role_id FROM roles WHERE role_name = 'ADMIN'))
-            """);
-        stmt.execute("""
-            INSERT OR IGNORE INTO users (username, password, full_name, role_id)
-            VALUES ('staff', 'staff123', 'Sample Staff',
-                    (SELECT role_id FROM roles WHERE role_name = 'STAFF'))
-            """);
+        Connection conn = stmt.getConnection();
 
-        // A few sample slots so the dashboards have something to show.
-        // In Step 12 the Admin will be able to add and edit slots.
-        insertSlot(stmt, "M-01", "2-Wheel");
-        insertSlot(stmt, "M-02", "2-Wheel");
-        insertSlot(stmt, "T-01", "3-Wheel");
-        insertSlot(stmt, "C-01", "4-Wheel");
-        insertSlot(stmt, "C-02", "4-Wheel");
-        insertSlot(stmt, "C-03", "4-Wheel");
-    }
-
-    private static void insertSlot(Statement stmt, String slotNumber, String typeName)
-            throws SQLException {
-        stmt.execute("INSERT OR IGNORE INTO parking_slots (slot_number, type_id) "
-                + "VALUES ('" + slotNumber + "', "
-                + "(SELECT type_id FROM vehicle_types WHERE type_name = '" + typeName + "'))");
-    }
-
-    // TEMPORARY test: prints what is in the database. We delete it after Step 7.
-    public static void main(String[] args) {
-        initialize();
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            System.out.println("\n--- Users (with role names) ---");
-            try (ResultSet rs = stmt.executeQuery("""
-                    SELECT u.username, u.full_name, r.role_name
-                    FROM users u
-                    JOIN roles r ON u.role_id = r.role_id
-                    """)) {
-                while (rs.next()) {
-                    System.out.println(rs.getString("username") + " | "
-                            + rs.getString("full_name") + " | "
-                            + rs.getString("role_name"));
-                }
-            }
-
-            System.out.println("\n--- Parking slots (with vehicle type) ---");
-            try (ResultSet rs = stmt.executeQuery("""
-                    SELECT s.slot_number, v.type_name, s.status
-                    FROM parking_slots s
-                    JOIN vehicle_types v ON s.type_id = v.type_id
-                    """)) {
-                while (rs.next()) {
-                    System.out.println(rs.getString("slot_number") + " | "
-                            + rs.getString("type_name") + " | "
-                            + rs.getString("status"));
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Test failed: " + e.getMessage());
+        try (PreparedStatement ps = conn.prepareStatement("""
+        INSERT OR IGNORE INTO users (username, password, full_name, role_id)
+        VALUES (?, ?, 'System Administrator',
+                (SELECT role_id FROM roles WHERE role_name = 'ADMIN'))
+        """)) {
+            ps.setString(1, "admin");
+            ps.setString(2, PasswordUtil.hash("admin123"));
+            ps.executeUpdate();
         }
+
+        try (PreparedStatement ps = conn.prepareStatement("""
+        INSERT OR IGNORE INTO users (username, password, full_name, role_id)
+        VALUES (?, ?, 'Sample Staff',
+                (SELECT role_id FROM roles WHERE role_name = 'STAFF'))
+        """)) {
+            ps.setString(1, "staff");
+            ps.setString(2, PasswordUtil.hash("staff123"));
+            ps.executeUpdate();
+        }
+
+        // Regular motorcycles: Ground floor
+        insertSlot(stmt, "M-01", "2-Wheel", "GROUND");
+        insertSlot(stmt, "M-02", "2-Wheel", "GROUND");
+
+// Big bikes: parked with the cars, Upper/Lower floor
+        insertSlot(stmt, "BB-01", "2-Wheel", "UPPER");
+        insertSlot(stmt, "BB-02", "2-Wheel", "LOWER");
+
+        insertSlot(stmt, "T-01", "3-Wheel", "GROUND");
+
+// Cars spread across floors
+        insertSlot(stmt, "C-01", "4-Wheel", "GROUND");
+        insertSlot(stmt, "C-02", "4-Wheel", "UPPER");
+        insertSlot(stmt, "C-03", "4-Wheel", "LOWER");
     }
+
+    private static void insertSlot(Statement stmt, String slotNumber, String typeName, String floorLevel)
+            throws SQLException {
+        stmt.execute("INSERT OR IGNORE INTO parking_slots (slot_number, type_id, floor_level) "
+                + "VALUES ('" + slotNumber + "', "
+                + "(SELECT type_id FROM vehicle_types WHERE type_name = '" + typeName + "'), "
+                + "'" + floorLevel + "')");
+    }
+
+
 }
