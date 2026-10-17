@@ -15,30 +15,32 @@
             fx:controller="com.ucc.parkingsystem.controller.ParkingRecordsController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0"
-              style="-fx-padding: 12; -fx-background-color: #2c3e50;">
-            <Button text="&lt; Back" onAction="#onBackClick"/>
-            <Label text="Parking Records"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
+            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="📋 Parking Records" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15.0" style="-fx-padding: 15;">
+        <VBox spacing="16.0" style="-fx-padding: 24;">
 
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Search plate:"/>
-                <TextField fx:id="searchField" promptText="Type part of a plate number"
-                           prefWidth="220.0"/>
-                <Label text="Show:"/>
-                <ChoiceBox fx:id="filterChoiceBox" prefWidth="130.0"/>
+            <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="form-panel">
+                <VBox spacing="4.0">
+                    <Label text="SEARCH PLATE" styleClass="field-label"/>
+                    <TextField fx:id="searchField" promptText="Type part of a plate number"
+                               prefWidth="220.0"/>
+                </VBox>
+                <VBox spacing="4.0">
+                    <Label text="SHOW" styleClass="field-label"/>
+                    <ChoiceBox fx:id="filterChoiceBox" prefWidth="130.0"/>
+                </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="countLabel" style="-fx-text-fill: gray;"/>
-                <Button text="Refresh" onAction="#onRefreshClick"/>
+                <Label fx:id="countLabel" styleClass="message-muted"/>
+                <Button text="⟳ Refresh" onAction="#onRefreshClick"/>
             </HBox>
 
-            <Label fx:id="messageLabel" style="-fx-text-fill: red;"/>
+            <Label fx:id="messageLabel" styleClass="message-error"/>
 
             <TableView fx:id="recordsTable" VBox.vgrow="ALWAYS">
                 <columns>

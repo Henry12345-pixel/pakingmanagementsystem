@@ -21,6 +21,7 @@ public class Navigator {
                             double width, double height) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(FXML_FOLDER + fxmlFile));
         Scene scene = new Scene(loader.load(), width, height);
+        scene.getStylesheets().add(Navigator.class.getResource("/com/ucc/parkingsystem/app.css").toExternalForm());
 
         Stage stage = (Stage) currentNode.getScene().getWindow();
         stage.setTitle(title);

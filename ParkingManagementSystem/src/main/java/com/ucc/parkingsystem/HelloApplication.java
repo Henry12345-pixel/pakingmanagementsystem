@@ -15,7 +15,8 @@ public class HelloApplication extends Application {
         DatabaseSetup.initialize();
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 350);
+        Scene scene = new Scene(fxmlLoader.load(), 400, 450);
+        scene.getStylesheets().add(HelloApplication.class.getResource("app.css").toExternalForm());
         stage.setTitle("Parking Management System - Login");
         stage.setScene(scene);
         stage.show();

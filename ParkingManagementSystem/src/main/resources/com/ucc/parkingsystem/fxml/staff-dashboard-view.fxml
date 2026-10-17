@@ -13,51 +13,40 @@
             fx:controller="com.ucc.parkingsystem.controller.StaffDashboardController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0"
-              style="-fx-padding: 12; -fx-background-color: #1e6b52;">
-            <Label text="Staff Dashboard"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar, staff">
+            <Label text="🅿 Staff Dashboard" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="welcomeLabel" style="-fx-text-fill: white;"/>
-            <Button text="Logout" onAction="#onLogoutClick"/>
+            <Label fx:id="welcomeLabel" styleClass="header-subtitle"/>
+            <Button text="Logout" onAction="#onLogoutClick" styleClass="button-ghost"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15.0" style="-fx-padding: 15;">
+        <VBox spacing="18.0" style="-fx-padding: 24;">
 
-            <!-- The three cards -->
-            <HBox spacing="15.0">
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #ecf0f1; -fx-padding: 12; -fx-background-radius: 6;">
-                    <Label fx:id="totalLabel" text="0"
-                           style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
-                    <Label text="Total Slots"/>
+            <HBox spacing="16.0">
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="stat-card" spacing="4">
+                    <Label text="TOTAL SLOTS" styleClass="stat-label"/>
+                    <Label fx:id="totalLabel" text="0" styleClass="stat-number"/>
                 </VBox>
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #d5f5e3; -fx-padding: 12; -fx-background-radius: 6;">
-                    <Label fx:id="availableLabel" text="0"
-                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1e8449;"/>
-                    <Label text="Available"/>
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-available" spacing="4">
+                    <Label text="AVAILABLE" styleClass="stat-label"/>
+                    <Label fx:id="availableLabel" text="0" styleClass="stat-number"/>
                 </VBox>
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #fadbd8; -fx-padding: 12; -fx-background-radius: 6;">
-                    <Label fx:id="occupiedLabel" text="0"
-                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #c0392b;"/>
-                    <Label text="Occupied"/>
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-occupied" spacing="4">
+                    <Label text="OCCUPIED" styleClass="stat-label"/>
+                    <Label fx:id="occupiedLabel" text="0" styleClass="stat-number"/>
                 </VBox>
             </HBox>
 
-            <!-- Staff actions -->
             <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Button text="Record Entry" onAction="#onRecordEntryClick"/>
-                <Button text="Record Exit" onAction="#onRecordExitClick"/>
+                <Button text="🚗 Record Entry" onAction="#onRecordEntryClick" styleClass="button-primary"/>
+                <Button text="🚙 Record Exit" onAction="#onRecordExitClick"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="lastUpdatedLabel" style="-fx-text-fill: gray;"/>
-                <Button text="Refresh" onAction="#onRefreshClick"/>
+                <Label fx:id="lastUpdatedLabel" styleClass="message-muted"/>
+                <Button text="⟳ Refresh" onAction="#onRefreshClick"/>
             </HBox>
 
-            <!-- Slot table -->
             <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="slotNumberColumn" text="Slot"/>

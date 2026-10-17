@@ -4,20 +4,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="12.0" style="-fx-padding: 30;"
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.ucc.parkingsystem.controller.LoginController">
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.ucc.parkingsystem.controller.LoginController"
+           style="-fx-background-color: #f1f5f9;">
 
-    <Label text="Parking Management System" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-    <Label text="Please log in"/>
+    <VBox styleClass="login-card" alignment="CENTER" spacing="6.0" maxWidth="320.0" maxHeight="-1">
+        <Label text="🅿 Parking Management" styleClass="login-title"/>
+        <Label text="Sign in to continue" styleClass="login-subtitle"/>
 
-    <TextField fx:id="usernameField" promptText="Username" maxWidth="250.0"/>
-    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="250.0"
-                   onAction="#onLoginClick"/>
+        <VBox spacing="4.0" style="-fx-padding: 20 0 0 0;">
+            <Label text="USERNAME" styleClass="field-label"/>
+            <TextField fx:id="usernameField" promptText="Enter your username"/>
+        </VBox>
 
-    <Button text="Login" onAction="#onLoginClick" prefWidth="250.0"/>
+        <VBox spacing="4.0" style="-fx-padding: 10 0 0 0;">
+            <Label text="PASSWORD" styleClass="field-label"/>
+            <PasswordField fx:id="passwordField" promptText="Enter your password"
+                           onAction="#onLoginClick"/>
+        </VBox>
 
-    <Label fx:id="messageLabel" style="-fx-text-fill: red;"/>
-</VBox>
+        <Button text="Log In" onAction="#onLoginClick" styleClass="button-primary"
+                maxWidth="Infinity" style="-fx-padding: 10; -fx-margin-top: 10;"/>
+
+        <Label fx:id="messageLabel" styleClass="message-error" wrapText="true"/>
+    </VBox>
+</StackPane>

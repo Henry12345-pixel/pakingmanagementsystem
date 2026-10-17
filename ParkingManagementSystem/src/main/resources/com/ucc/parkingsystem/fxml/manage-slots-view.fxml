@@ -15,37 +15,46 @@
             fx:controller="com.ucc.parkingsystem.controller.ManageSlotsController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0"
-              style="-fx-padding: 12; -fx-background-color: #2c3e50;">
-            <Button text="&lt; Back" onAction="#onBackClick"/>
-            <Label text="Manage Parking Slots"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
+            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="🅿 Manage Parking Slots" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15.0" style="-fx-padding: 15;">
+        <VBox spacing="16.0" style="-fx-padding: 24;">
 
             <!-- Add / Edit form -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT"
-                  style="-fx-padding: 10; -fx-background-color: #ecf0f1; -fx-background-radius: 6;">
-                <Label text="Slot Number:"/>
-                <TextField fx:id="slotNumberField" promptText="e.g. C-04" prefWidth="120.0"/>
+            <VBox spacing="10.0" styleClass="form-panel">
+                <Label text="ADD OR EDIT SLOT" styleClass="field-label"/>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <VBox spacing="4.0">
+                        <Label text="Slot Number" styleClass="field-label"/>
+                        <TextField fx:id="slotNumberField" promptText="e.g. C-04" prefWidth="120.0"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Vehicle Type" styleClass="field-label"/>
+                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="120.0"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Floor" styleClass="field-label"/>
+                        <ChoiceBox fx:id="floorChoiceBox" prefWidth="100.0"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox spacing="4.0" alignment="BOTTOM_LEFT">
+                        <HBox spacing="8.0">
+                            <Button text="Add" onAction="#onAddClick" styleClass="button-primary"/>
+                            <Button text="Update Selected" onAction="#onUpdateClick"/>
+                            <Button text="Delete Selected" onAction="#onDeleteClick" styleClass="button-danger"/>
+                            <Button text="Clear" onAction="#onClearClick" styleClass="button-ghost"
+                                    style="-fx-text-fill: #64748b;"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
 
-                <Label text="Vehicle Type:"/>
-                <ChoiceBox fx:id="typeChoiceBox" prefWidth="120.0"/>
-
-                <Label text="Floor:"/>
-                <ChoiceBox fx:id="floorChoiceBox" prefWidth="100.0"/>
-
-                <Button text="Add" onAction="#onAddClick"/>
-                <Button text="Update Selected" onAction="#onUpdateClick"/>
-                <Button text="Delete Selected" onAction="#onDeleteClick"/>
-                <Button text="Clear" onAction="#onClearClick"/>
-            </HBox>
-
-            <Label fx:id="messageLabel" style="-fx-text-fill: red;"/>
+            <Label fx:id="messageLabel" styleClass="message-error"/>
 
             <!-- Slot list -->
             <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS">

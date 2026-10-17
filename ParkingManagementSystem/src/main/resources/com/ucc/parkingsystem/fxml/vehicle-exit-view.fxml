@@ -14,27 +14,28 @@
             fx:controller="com.ucc.parkingsystem.controller.VehicleExitController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0"
-              style="-fx-padding: 12; -fx-background-color: #1e6b52;">
-            <Button text="&lt; Back" onAction="#onBackClick"/>
-            <Label text="Record Vehicle Exit"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar, staff">
+            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="🚙 Record Vehicle Exit" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15.0" style="-fx-padding: 15;">
+        <VBox spacing="16.0" style="-fx-padding: 24;">
 
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Search plate:"/>
-                <TextField fx:id="searchField" promptText="Type part of a plate number"
-                           prefWidth="250.0"/>
+            <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="form-panel">
+                <VBox spacing="4.0">
+                    <Label text="SEARCH PLATE" styleClass="field-label"/>
+                    <TextField fx:id="searchField" promptText="Type part of a plate number"
+                               prefWidth="250.0"/>
+                </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Record Exit for Selected" onAction="#onRecordExitClick"/>
+                <Button text="Record Exit for Selected" onAction="#onRecordExitClick"
+                        styleClass="button-primary"/>
             </HBox>
 
-            <Label fx:id="messageLabel" wrapText="true"/>
+            <Label fx:id="messageLabel" wrapText="true" styleClass="message-error"/>
 
             <TableView fx:id="parkedTable" VBox.vgrow="ALWAYS">
                 <columns>

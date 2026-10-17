@@ -15,31 +15,38 @@
             fx:controller="com.ucc.parkingsystem.controller.ManageStaffController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0"
-              style="-fx-padding: 12; -fx-background-color: #2c3e50;">
-            <Button text="&lt; Back" onAction="#onBackClick"/>
-            <Label text="Manage Staff Accounts"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
+            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="👤 Manage Staff Accounts" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15.0" style="-fx-padding: 15;">
+        <VBox spacing="16.0" style="-fx-padding: 24;">
 
             <!-- Add new staff form -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT"
-                  style="-fx-padding: 10; -fx-background-color: #ecf0f1; -fx-background-radius: 6;">
-                <Label text="Full Name:"/>
-                <TextField fx:id="fullNameField" prefWidth="140.0"/>
-                <Label text="Username:"/>
-                <TextField fx:id="usernameField" prefWidth="110.0"/>
-                <Label text="Password:"/>
-                <PasswordField fx:id="passwordField" prefWidth="110.0"/>
-                <Button text="Add Staff" onAction="#onAddClick"/>
-            </HBox>
+            <VBox spacing="10.0" styleClass="form-panel">
+                <Label text="ADD NEW STAFF" styleClass="field-label"/>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <VBox spacing="4.0">
+                        <Label text="Full Name" styleClass="field-label"/>
+                        <TextField fx:id="fullNameField" prefWidth="140.0"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Username" styleClass="field-label"/>
+                        <TextField fx:id="usernameField" prefWidth="110.0"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Password" styleClass="field-label"/>
+                        <PasswordField fx:id="passwordField" prefWidth="110.0"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Add Staff" onAction="#onAddClick" styleClass="button-primary"/>
+                </HBox>
+            </VBox>
 
-            <Label fx:id="messageLabel" style="-fx-text-fill: red;"/>
+            <Label fx:id="messageLabel" styleClass="message-error"/>
 
             <!-- Existing staff -->
             <TableView fx:id="staffTable" VBox.vgrow="ALWAYS">
@@ -54,14 +61,20 @@
             </TableView>
 
             <!-- Actions for the selected staff row -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="New Password:"/>
-                <PasswordField fx:id="newPasswordField" prefWidth="140.0"/>
-                <Button text="Reset Password" onAction="#onResetPasswordClick"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Activate" onAction="#onActivateClick"/>
-                <Button text="Deactivate" onAction="#onDeactivateClick"/>
-            </HBox>
+            <VBox spacing="10.0" styleClass="form-panel">
+                <Label text="SELECTED STAFF ACTIONS" styleClass="field-label"/>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <VBox spacing="4.0">
+                        <Label text="New Password" styleClass="field-label"/>
+                        <PasswordField fx:id="newPasswordField" prefWidth="140.0"/>
+                    </VBox>
+                    <Button text="Reset Password" onAction="#onResetPasswordClick"
+                            style="-fx-margin-top: 18;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Activate" onAction="#onActivateClick"/>
+                    <Button text="Deactivate" onAction="#onDeactivateClick" styleClass="button-danger"/>
+                </HBox>
+            </VBox>
         </VBox>
     </center>
 </BorderPane>
