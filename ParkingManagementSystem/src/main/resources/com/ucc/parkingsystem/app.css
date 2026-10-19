@@ -1,0 +1,197 @@
+/* ============ Color palette ============ */
+* {
+    -fx-primary: #2563eb;          /* blue - primary actions */
+    -fx-primary-dark: #1e3a8a;     /* admin header */
+    -fx-secondary-dark: #065f46;   /* staff header */
+    -fx-success: #16a34a;
+    -fx-success-bg: #dcfce7;
+    -fx-danger: #dc2626;
+    -fx-danger-bg: #fee2e2;
+    -fx-neutral-bg: #f1f5f9;
+    -fx-text-dark: #1e293b;
+    -fx-text-muted: #64748b;
+    -fx-border-color-light: #e2e8f0;
+}
+
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f8fafc;
+}
+
+/* ============ Header bar ============ */
+.header-bar {
+    -fx-padding: 16 24;
+    -fx-background-color: -fx-primary-dark;
+}
+
+.header-bar.staff {
+    -fx-background-color: -fx-secondary-dark;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.header-subtitle {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+}
+
+/* ============ Buttons ============ */
+.button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-dark;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.button-primary {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+}
+.button-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.button-danger {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-danger;
+    -fx-border-color: #fecaca;
+}
+.button-danger:hover {
+    -fx-background-color: -fx-danger-bg;
+}
+
+.button-ghost {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+.button-ghost:hover {
+    -fx-background-color: rgba(255,255,255,0.15);
+}
+
+/* ============ Cards (dashboard stat boxes) ============ */
+.stat-card {
+    -fx-padding: 18;
+    -fx-background-radius: 10;
+    -fx-background-color: white;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.stat-number {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.stat-label {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 13px;
+}
+
+.stat-card-available .stat-number { -fx-text-fill: -fx-success; }
+.stat-card-occupied .stat-number  { -fx-text-fill: -fx-danger; }
+
+/* ============ Form container (login, slots, staff forms) ============ */
+.form-panel {
+    -fx-padding: 16;
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.text-field, .password-field, .choice-box, .text-area {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+}
+.text-field:focused, .password-field:focused, .choice-box:focused {
+    -fx-border-color: -fx-primary;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-muted;
+}
+
+/* ============ Tables ============ */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 8;
+}
+.table-view .column-header-background {
+    -fx-background-color: -fx-neutral-bg;
+    -fx-background-radius: 8 8 0 0;
+}
+.table-view .column-header-background .label {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.table-row-cell {
+    -fx-border-color: transparent transparent -fx-border-color-light transparent;
+}
+.table-row-cell:selected {
+    -fx-background-color: #dbeafe;
+}
+.table-row-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+/* ============ Status pills, used in code via setStyle on a cell if desired ============ */
+.status-available { -fx-text-fill: -fx-success; -fx-font-weight: bold; }
+.status-occupied { -fx-text-fill: -fx-danger; -fx-font-weight: bold; }
+
+/* ============ Messages ============ */
+.message-error {
+    -fx-text-fill: -fx-danger;
+    -fx-font-size: 12px;
+}
+.message-success {
+    -fx-text-fill: -fx-success;
+    -fx-font-size: 12px;
+}
+.message-muted {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 12px;
+}
+
+/* ============ Login screen ============ */
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 40;
+}
+.login-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+.login-subtitle {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 13px;
+}

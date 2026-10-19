@@ -15,7 +15,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar, staff">
             <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="🚗 Record Vehicle Entry" styleClass="header-title"/>
+            <Label text="Record Vehicle Entry" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>

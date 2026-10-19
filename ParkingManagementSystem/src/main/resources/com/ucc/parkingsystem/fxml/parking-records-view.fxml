@@ -17,7 +17,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
             <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="📋 Parking Records" styleClass="header-title"/>
+            <Label text="Parking Records" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>

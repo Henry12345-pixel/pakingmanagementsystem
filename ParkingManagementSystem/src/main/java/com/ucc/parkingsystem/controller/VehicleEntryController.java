@@ -24,7 +24,6 @@ public class VehicleEntryController {
     @FXML private TextField plateField;
     @FXML private Label messageLabel;
 
-    // The dropdowns show text, so we remember the real IDs behind that text.
     private final Map<String, Integer> typeIdsByName = new HashMap<>();
     private final Map<String, Integer> slotIdsByNumber = new HashMap<>();
 
@@ -41,31 +40,46 @@ public class VehicleEntryController {
             showError("Could not load vehicle types.");
         }
 
-        floorChoiceBox.setItems(FXCollections.observableArrayList("GROUND", "UPPER", "LOWER"));
-
-        // Reload slots whenever EITHER the type OR the floor changes.
-        typeChoiceBox.setOnAction(event -> loadSlotsForSelection());
-        floorChoiceBox.setOnAction(event -> loadSlotsForSelection());
+        typeChoiceBox.setOnAction(event -> {
+            loadFloorsForSelectedType();
+            loadSlotsForSelection(true);
+        });
+        floorChoiceBox.setOnAction(event -> loadSlotsForSelection(true));
     }
 
-    private void loadSlotsForSelection() {
+    private void loadFloorsForSelectedType() {
+        String type = typeChoiceBox.getValue();
+        List<String> allowed = VehicleFloorRules.allowedFloors(type);
+        floorChoiceBox.setItems(FXCollections.observableArrayList(allowed));
+        floorChoiceBox.setValue(allowed.size() == 1 ? allowed.get(0) : null);
+    }
+
+    // announceEmpty: whether to show a warning when no slots are available.
+    // We pass false right after a successful entry, so this silent refresh
+    // doesn't overwrite the green "Recorded" success message.
+    private void loadSlotsForSelection(boolean announceEmpty) {
         String type = typeChoiceBox.getValue();
         String floor = floorChoiceBox.getValue();
         slotChoiceBox.getItems().clear();
         slotIdsByNumber.clear();
 
         if (type == null || floor == null) {
-            return;   // wait until both are chosen
+            return;
         }
 
         try {
             List<ParkingSlot> slots = ParkingSlotDAO.getAvailableSlots(type, floor);
 
             if (slots.isEmpty()) {
-                showError("No available " + type + " slots on the " + floor.toLowerCase() + " floor.");
+                if (announceEmpty) {
+                    showError("No available " + type + " slots on the " + floor.toLowerCase() + " floor.");
+                }
                 return;
             }
-            messageLabel.setText("");
+
+            if (announceEmpty) {
+                messageLabel.setText("");
+            }
 
             for (ParkingSlot slot : slots) {
                 slotChoiceBox.getItems().add(slot.getSlotNumber());
@@ -74,7 +88,9 @@ public class VehicleEntryController {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            showError("Could not load available slots.");
+            if (announceEmpty) {
+                showError("Could not load available slots.");
+            }
         }
     }
 
@@ -112,17 +128,12 @@ public class VehicleEntryController {
                 messageLabel.setStyle("-fx-text-fill: green;");
                 messageLabel.setText("Recorded: " + plate + " parked at " + slotNumber + ".");
                 plateField.clear();
+                slotChoiceBox.setValue(null);
+                loadSlotsForSelection(false);   // quiet refresh, keeps the success message visible
             } else {
+                slotChoiceBox.setValue(null);
+                loadSlotsForSelection(true);
                 showError("Slot " + slotNumber + " is no longer available. Please choose another.");
-            }
-
-            slotChoiceBox.setValue(null);
-            String message = messageLabel.getText();
-            String style = messageLabel.getStyle();
-            loadSlotsForSelection();
-            if (!message.isEmpty() && messageLabel.getText().isEmpty()) {
-                messageLabel.setStyle(style);
-                messageLabel.setText(message);
             }
 
         } catch (SQLException e) {

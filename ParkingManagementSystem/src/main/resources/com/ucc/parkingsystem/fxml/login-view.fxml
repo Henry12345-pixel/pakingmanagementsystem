@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -11,8 +12,8 @@
            fx:controller="com.ucc.parkingsystem.controller.LoginController"
            style="-fx-background-color: #f1f5f9;">
 
-    <VBox styleClass="login-card" alignment="CENTER" spacing="6.0" maxWidth="320.0" maxHeight="-1">
-        <Label text="🅿 Parking Management" styleClass="login-title"/>
+    <VBox styleClass="login-card" alignment="CENTER" spacing="6.0" maxWidth="320.0" maxHeight="20">
+        <Label text="Parking Management" styleClass="login-title"/>
         <Label text="Sign in to continue" styleClass="login-subtitle"/>
 
         <VBox spacing="4.0" style="-fx-padding: 20 0 0 0;">
@@ -22,8 +23,13 @@
 
         <VBox spacing="4.0" style="-fx-padding: 10 0 0 0;">
             <Label text="PASSWORD" styleClass="field-label"/>
-            <PasswordField fx:id="passwordField" promptText="Enter your password"
-                           onAction="#onLoginClick"/>
+            <StackPane>
+                <PasswordField fx:id="passwordField" promptText="Enter your password"
+                               onAction="#onLoginClick"/>
+                <TextField fx:id="passwordTextField" promptText="Enter your password"
+                           onAction="#onLoginClick" visible="false" managed="false"/>
+            </StackPane>
+            <CheckBox fx:id="showPasswordCheck" text="Show password" style="-fx-font-size: 11px;"/>
         </VBox>
 
         <Button text="Log In" onAction="#onLoginClick" styleClass="button-primary"

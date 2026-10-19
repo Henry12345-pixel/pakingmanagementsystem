@@ -4,20 +4,34 @@ import com.ucc.parkingsystem.database.UserDAO;
 import com.ucc.parkingsystem.model.Session;
 import com.ucc.parkingsystem.model.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
 
-    // These names must match the fx:id values in login-view.fxml
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private TextField passwordTextField;
+    @FXML private CheckBox showPasswordCheck;
     @FXML private Label messageLabel;
+
+    @FXML
+    public void initialize() {
+        // Keep the hidden and visible password fields always in sync.
+        passwordTextField.textProperty().bindBidirectional(passwordField.textProperty());
+
+        showPasswordCheck.selectedProperty().addListener((obs, wasShown, showNow) -> {
+            passwordField.setVisible(!showNow);
+            passwordField.setManaged(!showNow);
+            passwordTextField.setVisible(showNow);
+            passwordTextField.setManaged(showNow);
+        });
+    }
 
     @FXML
     protected void onLoginClick() {
@@ -29,7 +43,6 @@ public class LoginController {
             return;
         }
 
-        // Ask the database
         User user;
         try {
             user = UserDAO.login(username, password);
@@ -44,7 +57,6 @@ public class LoginController {
             return;
         }
 
-        // Remember who logged in, then open the right dashboard for their role
         Session.setCurrentUser(user);
 
         try {
@@ -58,6 +70,4 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
-
 }

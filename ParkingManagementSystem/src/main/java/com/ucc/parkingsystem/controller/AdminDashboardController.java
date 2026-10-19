@@ -9,7 +9,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -18,15 +18,22 @@ import javafx.util.Duration;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDashboardController {
+
+    private static final String ALL = "All";
 
     @FXML private Label welcomeLabel;
     @FXML private Label totalLabel;
     @FXML private Label availableLabel;
     @FXML private Label occupiedLabel;
     @FXML private Label lastUpdatedLabel;
+
+    @FXML private ChoiceBox<String> typeFilterChoiceBox;
+    @FXML private ChoiceBox<String> floorFilterChoiceBox;
+    @FXML private ChoiceBox<String> statusFilterChoiceBox;
 
     @FXML private TableView<ParkingSlot> slotsTable;
     @FXML private TableColumn<ParkingSlot, String> slotNumberColumn;
@@ -37,6 +44,8 @@ public class AdminDashboardController {
 
     private static final DateTimeFormatter CLOCK_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
     private Timeline autoRefresh;
+
+    private List<ParkingSlot> allSlots = new ArrayList<>();
 
     @FXML
     public void initialize() {
@@ -59,11 +68,58 @@ public class AdminDashboardController {
             return new SimpleStringProperty(plate == null ? "-" : plate);
         });
 
+        setUpFilters();
         loadData();
         startAutoRefresh();
     }
 
-    // Calls loadData() every 5 seconds while this screen is showing.
+    private void setUpFilters() {
+        List<String> types = new ArrayList<>();
+        types.add(ALL);
+        try {
+            types.addAll(ParkingSlotDAO.getAllVehicleTypeNames());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        typeFilterChoiceBox.setItems(FXCollections.observableArrayList(types));
+        typeFilterChoiceBox.setValue(ALL);
+
+        floorFilterChoiceBox.setItems(FXCollections.observableArrayList(ALL, "GROUND", "UPPER", "LOWER"));
+        floorFilterChoiceBox.setValue(ALL);
+
+        statusFilterChoiceBox.setItems(FXCollections.observableArrayList(ALL, "AVAILABLE", "OCCUPIED"));
+        statusFilterChoiceBox.setValue(ALL);
+
+        typeFilterChoiceBox.setOnAction(event -> applyFilters());
+        floorFilterChoiceBox.setOnAction(event -> applyFilters());
+        statusFilterChoiceBox.setOnAction(event -> applyFilters());
+    }
+
+    @FXML
+    private void onClearFiltersClick() {
+        typeFilterChoiceBox.setValue(ALL);
+        floorFilterChoiceBox.setValue(ALL);
+        statusFilterChoiceBox.setValue(ALL);
+        applyFilters();
+    }
+
+    private void applyFilters() {
+        String type = typeFilterChoiceBox.getValue();
+        String floor = floorFilterChoiceBox.getValue();
+        String status = statusFilterChoiceBox.getValue();
+
+        List<ParkingSlot> matches = new ArrayList<>();
+        for (ParkingSlot slot : allSlots) {
+            boolean typeOk = ALL.equals(type) || slot.getTypeName().equals(type);
+            boolean floorOk = ALL.equals(floor) || slot.getFloorLevel().equals(floor);
+            boolean statusOk = ALL.equals(status) || slot.getStatus().equals(status);
+            if (typeOk && floorOk && statusOk) {
+                matches.add(slot);
+            }
+        }
+        slotsTable.setItems(FXCollections.observableArrayList(matches));
+    }
+
     private void startAutoRefresh() {
         autoRefresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
             if (slotsTable.getScene() == null || slotsTable.getScene().getWindow() == null) {
@@ -78,11 +134,11 @@ public class AdminDashboardController {
 
     private void loadData() {
         try {
-            List<ParkingSlot> slots = ParkingSlotDAO.getAllSlots();
+            allSlots = ParkingSlotDAO.getAllSlots();
 
-            int total = slots.size();
+            int total = allSlots.size();
             int occupied = 0;
-            for (ParkingSlot slot : slots) {
+            for (ParkingSlot slot : allSlots) {
                 if (slot.isOccupied()) {
                     occupied++;
                 }
@@ -91,7 +147,8 @@ public class AdminDashboardController {
             totalLabel.setText(String.valueOf(total));
             occupiedLabel.setText(String.valueOf(occupied));
             availableLabel.setText(String.valueOf(total - occupied));
-            slotsTable.setItems(FXCollections.observableArrayList(slots));
+
+            applyFilters();
 
             lastUpdatedLabel.setStyle("-fx-text-fill: gray;");
             lastUpdatedLabel.setText("Last updated: " + LocalTime.now().format(CLOCK_FORMAT));

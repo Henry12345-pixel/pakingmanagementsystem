@@ -17,7 +17,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
             <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="🅿 Manage Parking Slots" styleClass="header-title"/>
+            <Label text="Manage Parking Slots" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
@@ -26,8 +26,10 @@
         <VBox spacing="16.0" style="-fx-padding: 24;">
 
             <!-- Add / Edit form -->
+            <!-- Add / Edit form -->
             <VBox spacing="10.0" styleClass="form-panel">
                 <Label text="ADD OR EDIT SLOT" styleClass="field-label"/>
+
                 <HBox spacing="10.0" alignment="CENTER_LEFT">
                     <VBox spacing="4.0">
                         <Label text="Slot Number" styleClass="field-label"/>
@@ -35,25 +37,22 @@
                     </VBox>
                     <VBox spacing="4.0">
                         <Label text="Vehicle Type" styleClass="field-label"/>
-                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="120.0"/>
+                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="180.0"/>
                     </VBox>
                     <VBox spacing="4.0">
                         <Label text="Floor" styleClass="field-label"/>
                         <ChoiceBox fx:id="floorChoiceBox" prefWidth="100.0"/>
                     </VBox>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <VBox spacing="4.0" alignment="BOTTOM_LEFT">
-                        <HBox spacing="8.0">
-                            <Button text="Add" onAction="#onAddClick" styleClass="button-primary"/>
-                            <Button text="Update Selected" onAction="#onUpdateClick"/>
-                            <Button text="Delete Selected" onAction="#onDeleteClick" styleClass="button-danger"/>
-                            <Button text="Clear" onAction="#onClearClick" styleClass="button-ghost"
-                                    style="-fx-text-fill: #64748b;"/>
-                        </HBox>
-                    </VBox>
+                </HBox>
+
+                <HBox spacing="8.0">
+                    <Button text="Add" onAction="#onAddClick" styleClass="button-primary" minWidth="70.0"/>
+                    <Button text="Update Selected" onAction="#onUpdateClick" minWidth="140.0"/>
+                    <Button text="Delete Selected" onAction="#onDeleteClick" styleClass="button-danger" minWidth="140.0"/>
+                    <Button text="Clear" onAction="#onClearClick" styleClass="button-ghost"
+                            style="-fx-text-fill: #64748b;" minWidth="60.0"/>
                 </HBox>
             </VBox>
-
             <Label fx:id="messageLabel" styleClass="message-error"/>
 
             <!-- Slot list -->

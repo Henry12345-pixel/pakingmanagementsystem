@@ -25,6 +25,8 @@ public class ParkingRecordDAO {
     public static boolean recordEntry(String plateNumber, int typeId, int slotId)
             throws SQLException {
 
+
+
         // Only succeeds if the slot is still AVAILABLE and is the right type.
         String claimSql = """
         UPDATE parking_slots SET status = 'OCCUPIED'
@@ -136,6 +138,55 @@ public class ParkingRecordDAO {
         return records;
     }
 
+    // Records the exit for whichever vehicle is currently in this slot, and frees
+// the slot, as one transaction. Returns false if the slot had no open record
+// (e.g. someone else already recorded the exit a moment ago).
+    public static boolean recordExitBySlot(int slotId) throws SQLException {
+
+        String exitSql = """
+        UPDATE parking_records SET exit_time = ?
+        WHERE slot_id = ? AND exit_time IS NULL
+        """;
+        String freeSql = "UPDATE parking_slots SET status = 'AVAILABLE' WHERE slot_id = ?";
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false);
+
+            int rowsChanged;
+            try (PreparedStatement exitPs = conn.prepareStatement(exitSql)) {
+                exitPs.setString(1, LocalDateTime.now().format(TIME_FORMAT));
+                exitPs.setInt(2, slotId);
+                rowsChanged = exitPs.executeUpdate();
+            }
+
+            if (rowsChanged == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            try (PreparedStatement freePs = conn.prepareStatement(freeSql)) {
+                freePs.setInt(1, slotId);
+                freePs.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
     // Records the exit and frees the slot, as one transaction.
 // Returns false if this record already had an exit time.
     // Records the exit and frees the slot, as one transaction.

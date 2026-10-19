@@ -2,8 +2,8 @@ package com.ucc.parkingsystem.controller;
 
 import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -23,7 +23,6 @@ public class ManageSlotsController {
     @FXML private TableColumn<ParkingSlot, String> floorColumn;
     @FXML private TableColumn<ParkingSlot, String> statusColumn;
 
-    // Remembers which slot is selected for Update/Delete, or null if none.
     private ParkingSlot selectedSlot;
 
     @FXML
@@ -37,20 +36,34 @@ public class ManageSlotsController {
         statusColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStatus()));
 
-        floorChoiceBox.setItems(FXCollections.observableArrayList("GROUND", "UPPER", "LOWER"));
+        // Floor choices depend on which vehicle type is selected.
+        typeChoiceBox.setOnAction(event -> loadFloorsForSelectedType(null));
 
-        // When a table row is clicked, copy its values into the form.
         slotsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldRow, newRow) -> {
             selectedSlot = newRow;
             if (newRow != null) {
                 slotNumberField.setText(newRow.getSlotNumber());
                 typeChoiceBox.setValue(newRow.getTypeName());
-                floorChoiceBox.setValue(newRow.getFloorLevel());
+                loadFloorsForSelectedType(newRow.getFloorLevel());
             }
         });
 
         loadTypes();
         loadSlots();
+    }
+
+    // Rebuilds the floor dropdown based on the chosen type, then selects
+    // preferredFloor if it's still valid (used when editing an existing row).
+    private void loadFloorsForSelectedType(String preferredFloor) {
+        String type = typeChoiceBox.getValue();
+        List<String> allowed = VehicleFloorRules.allowedFloors(type);
+        floorChoiceBox.setItems(FXCollections.observableArrayList(allowed));
+
+        if (preferredFloor != null && allowed.contains(preferredFloor)) {
+            floorChoiceBox.setValue(preferredFloor);
+        } else {
+            floorChoiceBox.setValue(allowed.size() == 1 ? allowed.get(0) : null);
+        }
     }
 
     private String formatFloor(String floorLevel) {
@@ -168,6 +181,7 @@ public class ManageSlotsController {
     private void onClearClick() {
         slotNumberField.clear();
         typeChoiceBox.setValue(null);
+        floorChoiceBox.setItems(FXCollections.observableArrayList());
         floorChoiceBox.setValue(null);
         slotsTable.getSelectionModel().clearSelection();
         selectedSlot = null;

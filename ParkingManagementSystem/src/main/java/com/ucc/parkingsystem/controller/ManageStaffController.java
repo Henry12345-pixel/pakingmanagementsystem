@@ -15,7 +15,13 @@ public class ManageStaffController {
     @FXML private TextField fullNameField;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private TextField passwordTextField;
+    @FXML private CheckBox showPasswordCheck;
+
     @FXML private PasswordField newPasswordField;
+    @FXML private TextField newPasswordTextField;
+    @FXML private CheckBox showNewPasswordCheck;
+
     @FXML private Label messageLabel;
 
     @FXML private TableView<User> staffTable;
@@ -37,7 +43,20 @@ public class ManageStaffController {
         staffTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldRow, newRow) -> selectedStaff = newRow);
 
+        wireShowPassword(passwordField, passwordTextField, showPasswordCheck);
+        wireShowPassword(newPasswordField, newPasswordTextField, showNewPasswordCheck);
+
         loadStaff();
+    }
+
+    private void wireShowPassword(PasswordField hidden, TextField shown, CheckBox toggle) {
+        shown.textProperty().bindBidirectional(hidden.textProperty());
+        toggle.selectedProperty().addListener((obs, was, showNow) -> {
+            hidden.setVisible(!showNow);
+            hidden.setManaged(!showNow);
+            shown.setVisible(showNow);
+            shown.setManaged(showNow);
+        });
     }
 
     private void loadStaff() {
@@ -83,6 +102,7 @@ public class ManageStaffController {
             }
         }
     }
+
     @FXML
     private void onResetPasswordClick() {
         if (selectedStaff == null) {
