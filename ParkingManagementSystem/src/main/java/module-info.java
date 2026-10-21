@@ -7,4 +7,7 @@ module com.ucc.parkingsystem {
     opens com.ucc.parkingsystem to javafx.fxml;
     opens com.ucc.parkingsystem.controller to javafx.fxml;
     exports com.ucc.parkingsystem;
+    exports com.ucc.parkingsystem.controller;
+    exports com.ucc.parkingsystem.util;
+    opens com.ucc.parkingsystem.util to javafx.fxml;
 }

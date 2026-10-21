@@ -9,47 +9,50 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
+<!-- Opens as a centered pop-up from the Staff Dashboard (see Navigator.openPopup). -->
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.ucc.parkingsystem.controller.VehicleEntryController">
+            fx:controller="com.ucc.parkingsystem.controller.VehicleEntryController"
+            prefWidth="520.0">
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar, staff">
-            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
             <Label text="Record Vehicle Entry" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
+            <Button text="✕ Close" onAction="#onCloseClick" styleClass="button-ghost"/>
         </HBox>
     </top>
 
     <center>
-        <VBox alignment="TOP_CENTER" style="-fx-padding: 30;">
-            <VBox spacing="14.0" styleClass="form-panel" maxWidth="380.0">
+        <VBox spacing="14.0" styleClass="page">
 
-                <VBox spacing="4.0">
-                    <Label text="VEHICLE TYPE" styleClass="field-label"/>
-                    <ChoiceBox fx:id="typeChoiceBox" maxWidth="Infinity"/>
-                </VBox>
-
-                <VBox spacing="4.0">
-                    <Label text="FLOOR" styleClass="field-label"/>
-                    <ChoiceBox fx:id="floorChoiceBox" maxWidth="Infinity"/>
-                </VBox>
-
-                <VBox spacing="4.0">
-                    <Label text="AVAILABLE SLOT" styleClass="field-label"/>
-                    <ChoiceBox fx:id="slotChoiceBox" maxWidth="Infinity"/>
-                </VBox>
-
-                <VBox spacing="4.0">
-                    <Label text="PLATE NUMBER" styleClass="field-label"/>
-                    <TextField fx:id="plateField" promptText="e.g. ABC 1234"/>
-                </VBox>
-
-                <Button text="Record Entry" onAction="#onRecordEntryClick"
-                        styleClass="button-primary" maxWidth="Infinity"
-                        style="-fx-padding: 10;"/>
-
-                <Label fx:id="messageLabel" wrapText="true" styleClass="message-error"/>
+            <VBox spacing="4.0">
+                <Label text="VEHICLE TYPE" styleClass="field-label"/>
+                <ChoiceBox fx:id="typeChoiceBox" maxWidth="Infinity"/>
             </VBox>
+
+            <VBox spacing="4.0">
+                <Label text="FLOOR" styleClass="field-label"/>
+                <ChoiceBox fx:id="floorChoiceBox" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="4.0">
+                <Label text="AVAILABLE SLOT" styleClass="field-label"/>
+                <ChoiceBox fx:id="slotChoiceBox" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="4.0">
+                <Label text="PLATE NUMBER" styleClass="field-label"/>
+                <TextField fx:id="plateField" promptText="ABC 1234" onAction="#onRecordEntryClick"/>
+                <Label text="3 letters, then 4 numbers. The space is added automatically."
+                       styleClass="message-muted" wrapText="true"/>
+            </VBox>
+
+            <Button text="Record Entry" onAction="#onRecordEntryClick"
+                    styleClass="button-primary" maxWidth="Infinity"
+                    style="-fx-padding: 10;"/>
+
+            <Label fx:id="messageLabel" wrapText="true" styleClass="message-error"
+                   minHeight="-Infinity"/>
         </VBox>
     </center>
 </BorderPane>

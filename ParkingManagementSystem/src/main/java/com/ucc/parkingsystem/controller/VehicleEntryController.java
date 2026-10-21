@@ -5,11 +5,15 @@ import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.database.VehicleTypeDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
 import com.ucc.parkingsystem.model.VehicleType;
+import com.ucc.parkingsystem.util.PlateNumber;
+import com.ucc.parkingsystem.util.Ui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -29,6 +33,9 @@ public class VehicleEntryController {
 
     @FXML
     public void initialize() {
+        floorChoiceBox.setConverter(Ui.titleCaseConverter());
+        setUpPlateField();
+
         try {
             List<VehicleType> types = VehicleTypeDAO.getAllTypes();
             for (VehicleType type : types) {
@@ -45,6 +52,21 @@ public class VehicleEntryController {
             loadSlotsForSelection(true);
         });
         floorChoiceBox.setOnAction(event -> loadSlotsForSelection(true));
+    }
+
+    // Forces whatever is typed or pasted into the "ABC 1234" template:
+    // capital letters for the first 3 characters, numbers for the last 4, space added automatically.
+    private void setUpPlateField() {
+        plateField.setTextFormatter(new TextFormatter<String>(change -> {
+            if (!change.isContentChange()) {
+                return change;   // just the cursor moving
+            }
+            String formatted = PlateNumber.format(change.getControlNewText());
+            change.setRange(0, change.getControlText().length());
+            change.setText(formatted);
+            change.selectRange(formatted.length(), formatted.length());
+            return change;
+        }));
     }
 
     private void loadFloorsForSelectedType() {
@@ -117,6 +139,10 @@ public class VehicleEntryController {
             showError("Enter the plate number.");
             return;
         }
+        if (!PlateNumber.isValid(plate)) {
+            showError("Plate number must be " + PlateNumber.HINT + ".");
+            return;
+        }
 
         int typeId = typeIdsByName.get(type);
         int slotId = slotIdsByNumber.get(slotNumber);
@@ -125,8 +151,7 @@ public class VehicleEntryController {
             boolean recorded = ParkingRecordDAO.recordEntry(plate, typeId, slotId);
 
             if (recorded) {
-                messageLabel.setStyle("-fx-text-fill: green;");
-                messageLabel.setText("Recorded: " + plate + " parked at " + slotNumber + ".");
+                Ui.success(messageLabel, "Recorded: " + plate + " parked at " + slotNumber + ".");
                 plateField.clear();
                 slotChoiceBox.setValue(null);
                 loadSlotsForSelection(false);   // quiet refresh, keeps the success message visible
@@ -142,17 +167,13 @@ public class VehicleEntryController {
         }
     }
 
+    // Closes the pop-up and returns to the staff dashboard.
     @FXML
-    private void onBackClick() {
-        try {
-            Navigator.goTo(plateField, "staff-dashboard-view.fxml", "Staff Dashboard", 900, 600);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+    private void onCloseClick() {
+        ((Stage) plateField.getScene().getWindow()).close();
     }
 
     private void showError(String message) {
-        messageLabel.setStyle("-fx-text-fill: red;");
-        messageLabel.setText(message);
+        Ui.error(messageLabel, message);
     }
 }

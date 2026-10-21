@@ -1,31 +1,57 @@
-/* ============ Color palette ============ */
-* {
+/* ==========================================================================
+   Parking Management System - theme
+   Admin = deep blue, Staff = emerald green, status = green (available) / red (occupied).
+   ========================================================================== */
+
+/* ============ Color palette ============
+   Looked-up colors must live on .root so every screen and dialog can use them. */
+.root {
     -fx-primary: #2563eb;          /* blue - primary actions */
+    -fx-primary-hover: #1d4ed8;
+    -fx-primary-soft: #eff6ff;
     -fx-primary-dark: #1e3a8a;     /* admin header */
     -fx-secondary-dark: #065f46;   /* staff header */
     -fx-success: #16a34a;
     -fx-success-bg: #dcfce7;
+    -fx-success-text: #166534;
     -fx-danger: #dc2626;
     -fx-danger-bg: #fee2e2;
+    -fx-danger-text: #991b1b;
     -fx-neutral-bg: #f1f5f9;
-    -fx-text-dark: #1e293b;
+    -fx-text-dark: #0f172a;
     -fx-text-muted: #64748b;
     -fx-border-color-light: #e2e8f0;
+
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f1f5f9;
+    -fx-accent: #2563eb;
+    -fx-focus-color: #2563eb;
+    -fx-faint-focus-color: transparent;
 }
 
-.root {
-    -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #f8fafc;
+/* ============ Page layout ============ */
+.page {
+    -fx-padding: 24 32;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
 }
 
 /* ============ Header bar ============ */
 .header-bar {
-    -fx-padding: 16 24;
-    -fx-background-color: -fx-primary-dark;
+    -fx-padding: 14 28;
+    -fx-background-color: linear-gradient(to right, #1e3a8a, #1d4ed8);
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.25), 8, 0, 0, 2);
 }
 
 .header-bar.staff {
-    -fx-background-color: -fx-secondary-dark;
+    -fx-background-color: linear-gradient(to right, #065f46, #047857);
 }
 
 .header-title {
@@ -35,7 +61,7 @@
 }
 
 .header-subtitle {
-    -fx-text-fill: #cbd5e1;
+    -fx-text-fill: #dbeafe;
     -fx-font-size: 13px;
 }
 
@@ -44,8 +70,8 @@
     -fx-background-color: white;
     -fx-text-fill: -fx-text-dark;
     -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
     -fx-padding: 8 16;
     -fx-font-size: 13px;
     -fx-cursor: hand;
@@ -53,15 +79,27 @@
 .button:hover {
     -fx-background-color: #f1f5f9;
 }
+.button:pressed {
+    -fx-background-color: #e2e8f0;
+}
+.button:disabled {
+    -fx-opacity: 0.45;
+}
 
-.button-primary {
+.button-primary,
+.button:default {
     -fx-background-color: -fx-primary;
     -fx-text-fill: white;
     -fx-border-color: transparent;
     -fx-font-weight: bold;
 }
-.button-primary:hover {
-    -fx-background-color: #1d4ed8;
+.button-primary:hover,
+.button:default:hover {
+    -fx-background-color: -fx-primary-hover;
+}
+.button-primary:pressed,
+.button:default:pressed {
+    -fx-background-color: #1e40af;
 }
 
 .button-danger {
@@ -73,63 +111,98 @@
     -fx-background-color: -fx-danger-bg;
 }
 
+/* Blue outline - used for the per-row "Change Password" button */
+.button-outline {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: #bfdbfe;
+}
+.button-outline:hover {
+    -fx-background-color: -fx-primary-soft;
+}
+
+.button-small {
+    -fx-padding: 4 12;
+    -fx-font-size: 12px;
+}
+
 .button-ghost {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-text-fill: white;
 }
 .button-ghost:hover {
-    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Ghost buttons on a white panel (e.g. "Clear Filters") need dark text */
+.form-panel .button-ghost {
+    -fx-text-fill: -fx-text-muted;
+    -fx-border-color: -fx-border-color-light;
+}
+.form-panel .button-ghost:hover {
+    -fx-background-color: #f1f5f9;
 }
 
 /* ============ Cards (dashboard stat boxes) ============ */
 .stat-card {
-    -fx-padding: 18;
-    -fx-background-radius: 10;
+    -fx-padding: 18 22;
+    -fx-background-radius: 12;
     -fx-background-color: white;
     -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 10;
+    -fx-border-radius: 12;
     -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 8, 0, 0, 2);
 }
 
 .stat-number {
-    -fx-font-size: 32px;
+    -fx-font-size: 34px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-text-dark;
 }
 
 .stat-label {
     -fx-text-fill: -fx-text-muted;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
 
+.stat-card-available { -fx-background-color: #f0fdf4; -fx-border-color: #bbf7d0; }
+.stat-card-occupied  { -fx-background-color: #fef2f2; -fx-border-color: #fecaca; }
 .stat-card-available .stat-number { -fx-text-fill: -fx-success; }
 .stat-card-occupied .stat-number  { -fx-text-fill: -fx-danger; }
 
-/* ============ Form container (login, slots, staff forms) ============ */
+/* ============ Form container (login, slots, staff forms, filters) ============ */
 .form-panel {
-    -fx-padding: 16;
+    -fx-padding: 16 20;
     -fx-background-color: white;
-    -fx-background-radius: 8;
+    -fx-background-radius: 12;
     -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 8;
+    -fx-border-radius: 12;
     -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.05), 8, 0, 0, 2);
 }
 
 .text-field, .password-field, .choice-box, .text-area {
     -fx-background-color: #f8fafc;
     -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
-    -fx-padding: 8;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 10;
     -fx-font-size: 13px;
 }
 .text-field:focused, .password-field:focused, .choice-box:focused {
+    -fx-background-color: white;
     -fx-border-color: -fx-primary;
 }
 
-.field-label {
+.check-box {
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 12px;
+}
+
+.field-label {
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-text-muted;
 }
@@ -138,28 +211,108 @@
 .table-view {
     -fx-background-color: white;
     -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 8;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 1;
 }
 .table-view .column-header-background {
     -fx-background-color: -fx-neutral-bg;
-    -fx-background-radius: 8 8 0 0;
+    -fx-background-radius: 10 10 0 0;
 }
-.table-view .column-header-background .label {
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 36px;
+    -fx-border-color: transparent transparent -fx-border-color-light transparent;
+}
+.table-view .column-header .label {
     -fx-text-fill: -fx-text-muted;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
+    -fx-alignment: CENTER_LEFT;
+}
+.table-cell {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 12;
+    -fx-text-fill: -fx-text-dark;
+    -fx-border-color: transparent;
 }
 .table-row-cell {
+    -fx-background-color: white;
     -fx-border-color: transparent transparent -fx-border-color-light transparent;
+}
+.table-row-cell:odd {
+    -fx-background-color: #f8fafc;
+}
+.table-row-cell:empty {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+.table-row-cell:hover {
+    -fx-background-color: -fx-primary-soft;
 }
 .table-row-cell:selected {
     -fx-background-color: #dbeafe;
 }
-.table-row-cell:hover {
-    -fx-background-color: #f8fafc;
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -fx-text-dark;
 }
 
-/* ============ Status pills, used in code via setStyle on a cell if desired ============ */
+/* ============ Vehicle-type sections on the dashboards ============ */
+.titled-pane > .title {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-radius: 10;
+    -fx-padding: 10 16;
+    -fx-cursor: hand;
+}
+.titled-pane > .title:hover {
+    -fx-background-color: #f8fafc;
+}
+.titled-pane:expanded > .title {
+    -fx-background-radius: 10 10 0 0;
+    -fx-border-radius: 10 10 0 0;
+}
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: -fx-text-muted;
+}
+.titled-pane > .content {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 10 10;
+    -fx-border-color: -fx-border-color-light;
+    -fx-border-width: 0 1 1 1;
+    -fx-border-radius: 0 0 10 10;
+    -fx-padding: 0;
+}
+.titled-pane > .content > .table-view {
+    -fx-border-color: transparent;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.group-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* ============ Status pills ============ */
+.badge {
+    -fx-padding: 2 10;
+    -fx-background-radius: 20;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.badge-available {
+    -fx-background-color: -fx-success-bg;
+    -fx-text-fill: -fx-success-text;
+}
+.badge-occupied {
+    -fx-background-color: -fx-danger-bg;
+    -fx-text-fill: -fx-danger-text;
+}
+
+/* Older class names, kept in case a cell still uses them */
 .status-available { -fx-text-fill: -fx-success; -fx-font-weight: bold; }
 .status-occupied { -fx-text-fill: -fx-danger; -fx-font-weight: bold; }
 
@@ -178,20 +331,38 @@
 }
 
 /* ============ Login screen ============ */
+.login-root {
+    -fx-background-color: linear-gradient(to bottom right, #1e3a8a, #2563eb 65%, #38bdf8);
+}
 .login-card {
     -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-border-color: -fx-border-color-light;
-    -fx-border-radius: 12;
-    -fx-border-width: 1;
+    -fx-background-radius: 16;
     -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.30), 28, 0.1, 0, 10);
 }
 .login-title {
-    -fx-font-size: 22px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-text-dark;
 }
 .login-subtitle {
     -fx-text-fill: -fx-text-muted;
     -fx-font-size: 13px;
+}
+
+/* ============ Pop-up dialogs (e.g. Change Password) ============ */
+.dialog-pane {
+    -fx-background-color: white;
+}
+.dialog-pane > .header-panel {
+    -fx-background-color: -fx-neutral-bg;
+    -fx-padding: 14 18;
+}
+.dialog-pane > .header-panel > .label {
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.dialog-pane > .content {
+    -fx-padding: 16 18;
 }

@@ -75,7 +75,8 @@ public class ParkingRecordsController {
 
     // Keeps only the records that match BOTH the plate search and the status filter.
     private void applyFilters() {
-        String search = searchField.getText().trim().toLowerCase();
+        // Spaces are ignored on both sides, so "abc1234" finds "ABC 1234".
+        String search = searchField.getText().replace(" ", "").toLowerCase();
         String filter = filterChoiceBox.getValue();
         List<ParkingRecord> matches = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class ParkingRecordsController {
                     || (SHOW_PARKED.equals(filter) && stillParked)
                     || (SHOW_EXITED.equals(filter) && !stillParked);
 
-            boolean plateOk = record.getPlateNumber().toLowerCase().contains(search);
+            boolean plateOk = record.getPlateNumber().replace(" ", "").toLowerCase().contains(search);
 
             if (statusOk && plateOk) {
                 matches.add(record);

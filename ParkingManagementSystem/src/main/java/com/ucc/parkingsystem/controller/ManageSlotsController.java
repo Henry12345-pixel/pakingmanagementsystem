@@ -2,10 +2,20 @@ package com.ucc.parkingsystem.controller;
 
 import com.ucc.parkingsystem.database.ParkingSlotDAO;
 import com.ucc.parkingsystem.model.ParkingSlot;
-import javafx.collections.FXCollections;
+import com.ucc.parkingsystem.util.Ui;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,8 +32,7 @@ public class ManageSlotsController {
     @FXML private TableColumn<ParkingSlot, String> typeColumn;
     @FXML private TableColumn<ParkingSlot, String> floorColumn;
     @FXML private TableColumn<ParkingSlot, String> statusColumn;
-
-    private ParkingSlot selectedSlot;
+    @FXML private TableColumn<ParkingSlot, Void> actionColumn;
 
     @FXML
     public void initialize() {
@@ -32,43 +41,59 @@ public class ManageSlotsController {
         typeColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getTypeName()));
         floorColumn.setCellValueFactory(
-                data -> new SimpleStringProperty(formatFloor(data.getValue().getFloorLevel())));
+                data -> new SimpleStringProperty(Ui.titleCase(data.getValue().getFloorLevel())));
         statusColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStatus()));
 
-        // Floor choices depend on which vehicle type is selected.
-        typeChoiceBox.setOnAction(event -> loadFloorsForSelectedType(null));
+        setUpActionColumn();
 
-        slotsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldRow, newRow) -> {
-            selectedSlot = newRow;
-            if (newRow != null) {
-                slotNumberField.setText(newRow.getSlotNumber());
-                typeChoiceBox.setValue(newRow.getTypeName());
-                loadFloorsForSelectedType(newRow.getFloorLevel());
-            }
-        });
+        floorChoiceBox.setConverter(Ui.titleCaseConverter());
+
+        // Floor choices depend on which vehicle type is selected.
+        typeChoiceBox.setOnAction(event -> loadFloorsForSelectedType());
 
         loadTypes();
         loadSlots();
     }
 
-    // Rebuilds the floor dropdown based on the chosen type, then selects
-    // preferredFloor if it's still valid (used when editing an existing row).
-    private void loadFloorsForSelectedType(String preferredFloor) {
+    // The Delete button at the right end of every slot row.
+    // It is greyed out for occupied slots, which can't be deleted.
+    private void setUpActionColumn() {
+        actionColumn.setSortable(false);
+        actionColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                deleteButton.getStyleClass().addAll("button-danger", "button-small");
+                deleteButton.setOnAction(event -> {
+                    int index = getIndex();
+                    if (index >= 0 && index < getTableView().getItems().size()) {
+                        onDeleteClick(getTableView().getItems().get(index));
+                    }
+                });
+                setAlignment(Pos.CENTER_RIGHT);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+                ParkingSlot slot = getTableView().getItems().get(getIndex());
+                deleteButton.setDisable(slot.isOccupied());
+                setGraphic(deleteButton);
+            }
+        });
+    }
+
+    // Rebuilds the floor dropdown based on the chosen vehicle type.
+    private void loadFloorsForSelectedType() {
         String type = typeChoiceBox.getValue();
         List<String> allowed = VehicleFloorRules.allowedFloors(type);
         floorChoiceBox.setItems(FXCollections.observableArrayList(allowed));
-
-        if (preferredFloor != null && allowed.contains(preferredFloor)) {
-            floorChoiceBox.setValue(preferredFloor);
-        } else {
-            floorChoiceBox.setValue(allowed.size() == 1 ? allowed.get(0) : null);
-        }
-    }
-
-    private String formatFloor(String floorLevel) {
-        if (floorLevel == null) return "";
-        return floorLevel.charAt(0) + floorLevel.substring(1).toLowerCase();
+        floorChoiceBox.setValue(allowed.size() == 1 ? allowed.get(0) : null);
     }
 
     private void loadTypes() {
@@ -96,71 +121,33 @@ public class ManageSlotsController {
         String floor = floorChoiceBox.getValue();
 
         if (slotNumber.isEmpty() || type == null || floor == null) {
-            messageLabel.setText("Enter a slot number, vehicle type, and floor.");
+            Ui.error(messageLabel, "Enter a slot number, vehicle type, and floor.");
             return;
         }
 
         try {
             ParkingSlotDAO.addSlot(slotNumber, type, floor);
-            messageLabel.setText("");
             onClearClick();
             loadSlots();
+            Ui.success(messageLabel, "Slot " + slotNumber + " added.");
         } catch (SQLException e) {
-            if (e.getMessage().contains("UNIQUE")) {
-                messageLabel.setText("Slot number \"" + slotNumber + "\" already exists.");
+            if (e.getMessage() != null && e.getMessage().contains("UNIQUE")) {
+                Ui.error(messageLabel, "Slot number \"" + slotNumber + "\" already exists.");
             } else {
                 showError("Could not add the slot.", e);
             }
         }
     }
 
-    @FXML
-    private void onUpdateClick() {
-        if (selectedSlot == null) {
-            messageLabel.setText("Select a slot from the table first.");
-            return;
-        }
-        if (selectedSlot.isOccupied()) {
-            messageLabel.setText("Cannot edit an occupied slot.");
-            return;
-        }
-
-        String slotNumber = slotNumberField.getText().trim();
-        String type = typeChoiceBox.getValue();
-        String floor = floorChoiceBox.getValue();
-
-        if (slotNumber.isEmpty() || type == null || floor == null) {
-            messageLabel.setText("Enter a slot number, vehicle type, and floor.");
-            return;
-        }
-
-        try {
-            ParkingSlotDAO.updateSlot(selectedSlot.getSlotId(), slotNumber, type, floor);
-            messageLabel.setText("");
-            onClearClick();
-            loadSlots();
-        } catch (SQLException e) {
-            if (e.getMessage().contains("UNIQUE")) {
-                messageLabel.setText("Slot number \"" + slotNumber + "\" already exists.");
-            } else {
-                showError("Could not update the slot.", e);
-            }
-        }
-    }
-
-    @FXML
-    private void onDeleteClick() {
-        if (selectedSlot == null) {
-            messageLabel.setText("Select a slot from the table first.");
-            return;
-        }
-        if (selectedSlot.isOccupied()) {
-            messageLabel.setText("Cannot delete an occupied slot.");
+    // Called by the Delete button on a row.
+    private void onDeleteClick(ParkingSlot slot) {
+        if (slot.isOccupied()) {
+            Ui.error(messageLabel, "Cannot delete an occupied slot.");
             return;
         }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Delete slot " + selectedSlot.getSlotNumber() + "?");
+                "Delete slot " + slot.getSlotNumber() + "?");
         confirm.showAndWait();
 
         if (confirm.getResult() != ButtonType.OK) {
@@ -168,12 +155,12 @@ public class ManageSlotsController {
         }
 
         try {
-            ParkingSlotDAO.deleteSlot(selectedSlot.getSlotId());
-            messageLabel.setText("");
-            onClearClick();
+            ParkingSlotDAO.deleteSlot(slot.getSlotId());
             loadSlots();
+            Ui.success(messageLabel, "Slot " + slot.getSlotNumber() + " deleted.");
         } catch (SQLException e) {
-            messageLabel.setText("This slot has parking history and cannot be deleted.");
+            Ui.error(messageLabel, "Slot " + slot.getSlotNumber()
+                    + " has parking history and cannot be deleted.");
         }
     }
 
@@ -183,8 +170,6 @@ public class ManageSlotsController {
         typeChoiceBox.setValue(null);
         floorChoiceBox.setItems(FXCollections.observableArrayList());
         floorChoiceBox.setValue(null);
-        slotsTable.getSelectionModel().clearSelection();
-        selectedSlot = null;
     }
 
     @FXML
@@ -199,6 +184,6 @@ public class ManageSlotsController {
 
     private void showError(String message, SQLException e) {
         e.printStackTrace();
-        messageLabel.setText(message);
+        Ui.error(messageLabel, message);
     }
 }
