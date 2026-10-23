@@ -16,11 +16,11 @@
             fx:controller="com.ucc.parkingsystem.controller.AdminDashboardController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
-            <ImageView fitWidth="28.0" fitHeight="28.0" preserveRatio="true">
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar">
+            <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true">
                 <image><Image url="@../logo.png"/></image>
             </ImageView>
-            <Label text="Admin Dashboard" styleClass="header-title"/>
+            <Label text="Admin dashboard" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="welcomeLabel" styleClass="header-subtitle"/>
             <Button text="Logout" onAction="#onLogoutClick" styleClass="button-ghost"/>
@@ -30,50 +30,50 @@
     <center>
         <!-- The whole page scrolls if the window is made small. -->
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <VBox spacing="16.0" styleClass="page">
+            <VBox spacing="32.0" styleClass="page">
 
                 <!-- Stat cards -->
-                <HBox spacing="16.0">
+                <HBox spacing="32.0">
                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="stat-card" spacing="4">
-                        <Label text="TOTAL SLOTS" styleClass="stat-label"/>
+                        <Label text="Total slots" styleClass="stat-label"/>
                         <Label fx:id="totalLabel" text="0" styleClass="stat-number"/>
                     </VBox>
                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="stat-card, stat-card-available" spacing="4">
-                        <Label text="AVAILABLE" styleClass="stat-label"/>
+                        <Label text="Available" styleClass="stat-label"/>
                         <Label fx:id="availableLabel" text="0" styleClass="stat-number"/>
                     </VBox>
                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="stat-card, stat-card-occupied" spacing="4">
-                        <Label text="OCCUPIED" styleClass="stat-label"/>
+                        <Label text="Occupied" styleClass="stat-label"/>
                         <Label fx:id="occupiedLabel" text="0" styleClass="stat-number"/>
                     </VBox>
                 </HBox>
 
                 <!-- Menu buttons (wrap onto a second line on narrow windows) -->
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <FlowPane hgap="10.0" vgap="8.0" HBox.hgrow="ALWAYS">
-                        <Button text="👤 Manage Staff" onAction="#onManageStaffClick"/>
-                        <Button text="🅿 Manage Slots" onAction="#onManageSlotsClick"/>
-                        <Button text="📋 Parking Records" onAction="#onRecordsClick"/>
+                <HBox spacing="14.0" alignment="CENTER_LEFT">
+                    <FlowPane hgap="10.0" vgap="14.0" HBox.hgrow="ALWAYS">
+                        <Button text="Manage staff" onAction="#onManageStaffClick"/>
+                        <Button text="Manage slots" onAction="#onManageSlotsClick"/>
+                        <Button text="Parking records" onAction="#onRecordsClick"/>
                     </FlowPane>
                     <Label fx:id="lastUpdatedLabel" styleClass="message-muted"/>
-                    <Button text="⟳ Refresh" onAction="#onRefreshClick"/>
+                    <Button text="Refresh" onAction="#onRefreshClick"/>
                 </HBox>
 
                 <!-- Filters -->
-                <FlowPane hgap="16.0" vgap="10.0" rowValignment="BOTTOM" styleClass="form-panel">
-                    <VBox spacing="4.0">
-                        <Label text="VEHICLE TYPE" styleClass="field-label"/>
-                        <ChoiceBox fx:id="typeFilterChoiceBox" prefWidth="200.0"/>
+                <FlowPane hgap="28.0" vgap="20.0" rowValignment="BOTTOM" styleClass="form-panel">
+                    <VBox spacing="8.0">
+                        <Label text="Vehicle type" styleClass="field-label"/>
+                        <ChoiceBox fx:id="typeFilterChoiceBox" prefWidth="260.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
-                        <Label text="FLOOR" styleClass="field-label"/>
-                        <ChoiceBox fx:id="floorFilterChoiceBox" prefWidth="120.0"/>
+                    <VBox spacing="8.0">
+                        <Label text="Floor" styleClass="field-label"/>
+                        <ChoiceBox fx:id="floorFilterChoiceBox" prefWidth="150.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
-                        <Label text="STATUS" styleClass="field-label"/>
-                        <ChoiceBox fx:id="statusFilterChoiceBox" prefWidth="120.0"/>
+                    <VBox spacing="8.0">
+                        <Label text="Status" styleClass="field-label"/>
+                        <ChoiceBox fx:id="statusFilterChoiceBox" prefWidth="150.0"/>
                     </VBox>
-                    <Button text="Clear Filters" onAction="#onClearFiltersClick" styleClass="button-ghost"/>
+                    <Button text="Clear filters" onAction="#onClearFiltersClick" styleClass="button-ghost"/>
                     <Button text="Expand all" onAction="#onExpandAllClick" styleClass="button-ghost"/>
                     <Button text="Collapse all" onAction="#onCollapseAllClick" styleClass="button-ghost"/>
                 </FlowPane>
@@ -81,7 +81,7 @@
                 <Label text="Click a vehicle type to open its list of slots." styleClass="message-muted"/>
 
                 <!-- One collapsible section per vehicle type is added here by the controller -->
-                <VBox fx:id="groupsContainer" spacing="12.0"/>
+                <VBox fx:id="groupsContainer" spacing="16.0"/>
             </VBox>
         </ScrollPane>
     </center>

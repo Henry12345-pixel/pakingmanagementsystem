@@ -18,38 +18,38 @@
             fx:controller="com.ucc.parkingsystem.controller.ManageStaffController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
-            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="Manage Staff Accounts" styleClass="header-title"/>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar">
+            <Button text="Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="Manage staff accounts" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="16.0" styleClass="page">
+        <VBox spacing="32.0" styleClass="page">
 
             <!-- Add new staff form -->
-            <VBox spacing="10.0" styleClass="form-panel">
-                <Label text="ADD NEW STAFF" styleClass="field-label"/>
-                <FlowPane hgap="14.0" vgap="10.0" rowValignment="BOTTOM">
-                    <VBox spacing="4.0">
-                        <Label text="Full Name" styleClass="field-label"/>
-                        <TextField fx:id="fullNameField" prefWidth="200.0"/>
+            <VBox spacing="14.0" styleClass="form-panel">
+                <Label text="Add new staff" styleClass="field-label"/>
+                <FlowPane hgap="28.0" vgap="20.0" rowValignment="BOTTOM">
+                    <VBox spacing="8.0">
+                        <Label text="Full name" styleClass="field-label"/>
+                        <TextField fx:id="fullNameField" prefWidth="260.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
+                    <VBox spacing="8.0">
                         <Label text="Username" styleClass="field-label"/>
-                        <TextField fx:id="usernameField" prefWidth="160.0"/>
+                        <TextField fx:id="usernameField" prefWidth="210.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
+                    <VBox spacing="8.0">
                         <Label text="Password" styleClass="field-label"/>
                         <StackPane>
-                            <PasswordField fx:id="passwordField" prefWidth="180.0"/>
-                            <TextField fx:id="passwordTextField" prefWidth="180.0"
+                            <PasswordField fx:id="passwordField" prefWidth="230.0"/>
+                            <TextField fx:id="passwordTextField" prefWidth="230.0"
                                        visible="false" managed="false"/>
                         </StackPane>
                         <CheckBox fx:id="showPasswordCheck" text="Show"/>
                     </VBox>
-                    <Button text="Add Staff" onAction="#onAddClick" styleClass="button-primary"/>
+                    <Button text="Add staff" onAction="#onAddClick" styleClass="button-primary"/>
                 </FlowPane>
                 <!-- Live checklist: turns red/green as the password is typed -->
                 <Label fx:id="passwordHintLabel" wrapText="true" styleClass="message-muted"/>
@@ -59,12 +59,12 @@
 
             <!-- Existing staff. The last column holds the row's buttons:
                  Change Password + Deactivate (active) or Activate (inactive). -->
-            <TableView fx:id="staffTable" VBox.vgrow="ALWAYS" minHeight="200.0">
+            <TableView fx:id="staffTable" VBox.vgrow="ALWAYS" minHeight="260.0">
                 <columns>
-                    <TableColumn fx:id="nameColumn" text="Full Name"/>
+                    <TableColumn fx:id="nameColumn" text="Full name"/>
                     <TableColumn fx:id="usernameColumn" text="Username"/>
-                    <TableColumn fx:id="statusColumn" text="Status" maxWidth="130.0"/>
-                    <TableColumn fx:id="actionColumn" text="Action" minWidth="270.0" maxWidth="340.0"/>
+                    <TableColumn fx:id="statusColumn" text="Status" maxWidth="160.0"/>
+                    <TableColumn fx:id="actionColumn" text="Action" minWidth="360.0" maxWidth="440.0"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

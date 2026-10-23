@@ -29,12 +29,12 @@ public final class ChangePasswordDialog {
     public static Optional<String> show(Window owner, User staff) {
         Dialog<String> dialog = new Dialog<>();
         dialog.initOwner(owner);
-        dialog.setTitle("Change Password");
+        dialog.setTitle("Change password");
         dialog.setHeaderText("Set a new password for " + staff.getFullName()
                 + " (" + staff.getUsername() + ")");
         Navigator.styleDialog(dialog.getDialogPane());
 
-        ButtonType changeButtonType = new ButtonType("Change Password", ButtonBar.ButtonData.OK_DONE);
+        ButtonType changeButtonType = new ButtonType("Change password", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
 
         PasswordField newHidden = new PasswordField();
@@ -64,16 +64,16 @@ public final class ChangePasswordDialog {
         hint.setMinHeight(Region.USE_PREF_SIZE);
         Ui.muted(hint, PasswordPolicy.REQUIREMENTS);
 
-        Label newLabel = new Label("NEW PASSWORD");
+        Label newLabel = new Label("New password");
         newLabel.getStyleClass().add("field-label");
-        Label confirmLabel = new Label("CONFIRM PASSWORD");
+        Label confirmLabel = new Label("Confirm password");
         confirmLabel.getStyleClass().add("field-label");
 
-        VBox content = new VBox(6,
+        VBox content = new VBox(12,
                 newLabel, new StackPane(newHidden, newShown),
                 confirmLabel, new StackPane(confirmHidden, confirmShown),
                 showCheck, hint);
-        content.setPrefWidth(380);
+        content.setPrefWidth(460);
         dialog.getDialogPane().setContent(content);
 
         Node changeButton = dialog.getDialogPane().lookupButton(changeButtonType);

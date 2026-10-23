@@ -67,7 +67,7 @@ public class ManageStaffController {
     private void setUpActionColumn() {
         actionColumn.setSortable(false);
         actionColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button changePasswordButton = new Button("Change Password");
+            private final Button changePasswordButton = new Button("Change password");
             private final Button deactivateButton = new Button("Deactivate");
             private final Button activateButton = new Button("Activate");
             private final HBox buttons = new HBox(8);

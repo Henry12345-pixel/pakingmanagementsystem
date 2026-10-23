@@ -32,8 +32,8 @@ public class SlotGroupsView {
 
     public static final String ALL = "All";
 
-    private static final double ROW_HEIGHT = 38;
-    private static final double HEADER_HEIGHT = 36;
+    private static final double ROW_HEIGHT = 52;
+    private static final double HEADER_HEIGHT = 46;
     private static final int MIN_ROWS = 2;
     private static final int MAX_ROWS = 12;
 
@@ -123,10 +123,10 @@ public class SlotGroupsView {
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            HBox header = new HBox(10, name, spacer, availableBadge, occupiedBadge);
+            HBox header = new HBox(24, name, spacer, availableBadge, occupiedBadge);
             header.setAlignment(Pos.CENTER_LEFT);
             // Make the title row fill the whole bar (minus the arrow) so the badges sit at the right edge.
-            header.prefWidthProperty().bind(pane.widthProperty().subtract(64));
+            header.prefWidthProperty().bind(pane.widthProperty().subtract(72));
 
             pane.setText(typeName);
             pane.setGraphic(header);
@@ -163,7 +163,7 @@ public class SlotGroupsView {
                 }
             });
 
-            TableColumn<ParkingSlot, String> vehicleColumn = new TableColumn<>("Vehicle (Plate No.)");
+            TableColumn<ParkingSlot, String> vehicleColumn = new TableColumn<>("Plate number");
             vehicleColumn.setCellValueFactory(d -> {
                 String plate = d.getValue().getPlateNumber();
                 return new SimpleStringProperty(plate == null ? "-" : plate);

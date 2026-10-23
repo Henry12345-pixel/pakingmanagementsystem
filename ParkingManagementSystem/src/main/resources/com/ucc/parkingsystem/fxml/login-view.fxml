@@ -15,19 +15,19 @@
 
     <!-- The card stays centered and keeps a comfortable width at any window size. -->
     <VBox styleClass="login-card" alignment="CENTER" spacing="6.0"
-          maxWidth="380.0" maxHeight="-Infinity">
+          maxWidth="480.0" maxHeight="-Infinity">
         <Label text="Parking Management" styleClass="login-title"/>
         <Label text="Sign in to continue" styleClass="login-subtitle"/>
 
-        <VBox spacing="4.0">
-            <padding><Insets top="20.0"/></padding>
-            <Label text="USERNAME" styleClass="field-label"/>
+        <VBox spacing="8.0">
+            <padding><Insets top="28.0"/></padding>
+            <Label text="Username" styleClass="field-label"/>
             <TextField fx:id="usernameField" promptText="Enter your username"/>
         </VBox>
 
-        <VBox spacing="4.0">
-            <padding><Insets top="10.0"/></padding>
-            <Label text="PASSWORD" styleClass="field-label"/>
+        <VBox spacing="8.0">
+            <padding><Insets top="18.0"/></padding>
+            <Label text="Password" styleClass="field-label"/>
             <StackPane>
                 <PasswordField fx:id="passwordField" promptText="Enter your password"
                                onAction="#onLoginClick"/>
@@ -38,9 +38,9 @@
         </VBox>
 
         <VBox spacing="6.0">
-            <padding><Insets top="12.0"/></padding>
-            <Button text="Log In" onAction="#onLoginClick" styleClass="button-primary"
-                    maxWidth="Infinity" style="-fx-padding: 10;"/>
+            <padding><Insets top="22.0"/></padding>
+            <Button text="Log in" onAction="#onLoginClick" styleClass="button-primary"
+                    maxWidth="Infinity"/>
             <Label fx:id="messageLabel" styleClass="message-error" wrapText="true"/>
         </VBox>
     </VBox>

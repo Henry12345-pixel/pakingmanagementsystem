@@ -15,40 +15,40 @@
             fx:controller="com.ucc.parkingsystem.controller.ParkingRecordsController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
-            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="Parking Records" styleClass="header-title"/>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar">
+            <Button text="Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="Parking records" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="16.0" styleClass="page">
+        <VBox spacing="32.0" styleClass="page">
 
             <HBox spacing="14.0" alignment="BOTTOM_LEFT" styleClass="form-panel">
-                <VBox spacing="4.0" HBox.hgrow="SOMETIMES">
-                    <Label text="SEARCH PLATE" styleClass="field-label"/>
+                <VBox spacing="8.0" HBox.hgrow="SOMETIMES">
+                    <Label text="Search plate number" styleClass="field-label"/>
                     <TextField fx:id="searchField" promptText="Type part of a plate number"
-                               prefWidth="260.0"/>
+                               prefWidth="300.0"/>
                 </VBox>
-                <VBox spacing="4.0">
-                    <Label text="SHOW" styleClass="field-label"/>
-                    <ChoiceBox fx:id="filterChoiceBox" prefWidth="140.0"/>
+                <VBox spacing="8.0">
+                    <Label text="Show" styleClass="field-label"/>
+                    <ChoiceBox fx:id="filterChoiceBox" prefWidth="170.0"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="countLabel" styleClass="message-muted"/>
-                <Button text="⟳ Refresh" onAction="#onRefreshClick"/>
+                <Button text="Refresh" onAction="#onRefreshClick"/>
             </HBox>
 
             <Label fx:id="messageLabel" styleClass="message-error" wrapText="true"/>
 
-            <TableView fx:id="recordsTable" VBox.vgrow="ALWAYS" minHeight="200.0">
+            <TableView fx:id="recordsTable" VBox.vgrow="ALWAYS" minHeight="260.0">
                 <columns>
-                    <TableColumn fx:id="plateColumn" text="Plate No."/>
-                    <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="plateColumn" text="Plate number"/>
+                    <TableColumn fx:id="typeColumn" text="Vehicle type"/>
                     <TableColumn fx:id="slotColumn" text="Slot"/>
-                    <TableColumn fx:id="entryColumn" text="Entry Time"/>
-                    <TableColumn fx:id="exitColumn" text="Exit Time"/>
+                    <TableColumn fx:id="entryColumn" text="Entry time"/>
+                    <TableColumn fx:id="exitColumn" text="Exit time"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

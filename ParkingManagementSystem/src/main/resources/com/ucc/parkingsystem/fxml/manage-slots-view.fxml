@@ -16,32 +16,32 @@
             fx:controller="com.ucc.parkingsystem.controller.ManageSlotsController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="header-bar">
-            <Button text="← Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="Manage Parking Slots" styleClass="header-title"/>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar">
+            <Button text="Back" onAction="#onBackClick" styleClass="button-ghost"/>
+            <Label text="Manage parking slots" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="16.0" styleClass="page">
+        <VBox spacing="32.0" styleClass="page">
 
             <!-- Add form -->
-            <VBox spacing="12.0" styleClass="form-panel">
-                <Label text="ADD NEW SLOT" styleClass="field-label"/>
+            <VBox spacing="16.0" styleClass="form-panel">
+                <Label text="Add new slot" styleClass="field-label"/>
 
-                <FlowPane hgap="14.0" vgap="10.0" rowValignment="BOTTOM">
-                    <VBox spacing="4.0">
-                        <Label text="Slot Number" styleClass="field-label"/>
-                        <TextField fx:id="slotNumberField" promptText="e.g. C-04" prefWidth="140.0"/>
+                <FlowPane hgap="28.0" vgap="20.0" rowValignment="BOTTOM">
+                    <VBox spacing="8.0">
+                        <Label text="Slot number" styleClass="field-label"/>
+                        <TextField fx:id="slotNumberField" promptText="e.g. C-04" prefWidth="170.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
-                        <Label text="Vehicle Type" styleClass="field-label"/>
-                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="200.0"/>
+                    <VBox spacing="8.0">
+                        <Label text="Vehicle type" styleClass="field-label"/>
+                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="260.0"/>
                     </VBox>
-                    <VBox spacing="4.0">
+                    <VBox spacing="8.0">
                         <Label text="Floor" styleClass="field-label"/>
-                        <ChoiceBox fx:id="floorChoiceBox" prefWidth="120.0"/>
+                        <ChoiceBox fx:id="floorChoiceBox" prefWidth="150.0"/>
                     </VBox>
                     <Button text="Add" onAction="#onAddClick" styleClass="button-primary" minWidth="80.0"/>
                     <Button text="Clear" onAction="#onClearClick" minWidth="70.0"/>
@@ -50,13 +50,13 @@
             <Label fx:id="messageLabel" styleClass="message-error" wrapText="true"/>
 
             <!-- Slot list. The last column holds a Delete button on every row. -->
-            <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS" minHeight="200.0">
+            <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS" minHeight="260.0">
                 <columns>
                     <TableColumn fx:id="slotNumberColumn" text="Slot"/>
-                    <TableColumn fx:id="typeColumn" text="Vehicle Type"/>
+                    <TableColumn fx:id="typeColumn" text="Vehicle type"/>
                     <TableColumn fx:id="floorColumn" text="Floor"/>
                     <TableColumn fx:id="statusColumn" text="Status"/>
-                    <TableColumn fx:id="actionColumn" text="Action" minWidth="110.0" maxWidth="150.0"/>
+                    <TableColumn fx:id="actionColumn" text="Action" minWidth="140.0" maxWidth="190.0"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
