@@ -8,12 +8,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 
 public class LoginController {
 
+    @FXML private ImageView logoView;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordTextField;
@@ -22,7 +26,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // Keep the hidden and visible password fields always in sync.
+        // Keep the hidden and visible password fields in sync.
         passwordTextField.textProperty().bindBidirectional(passwordField.textProperty());
 
         showPasswordCheck.selectedProperty().addListener((obs, wasShown, showNow) -> {
@@ -31,6 +35,18 @@ public class LoginController {
             passwordTextField.setVisible(showNow);
             passwordTextField.setManaged(showNow);
         });
+
+        // Show the logo only if it actually loads; otherwise it stays
+        // invisible/unmanaged (set in FXML) and takes up no space.
+        try (InputStream logoStream = getClass().getResourceAsStream("logo.png")) {
+            if (logoStream != null) {
+                logoView.setImage(new Image(logoStream));
+                logoView.setVisible(true);
+                logoView.setManaged(true);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
