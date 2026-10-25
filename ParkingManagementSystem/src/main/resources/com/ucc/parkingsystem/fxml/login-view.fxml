@@ -24,7 +24,7 @@
                 <Label text="P" styleClass="login-hero-badge-text"/>
             </StackPane>
 
-            <Label text="Parking Management" styleClass="login-hero-title" wrapText="true"
+            <Label text="PARKSPACE" styleClass="login-hero-title" wrapText="true"
                    style="-fx-padding: 16 0 0 0;"/>
 
             <Label text="A simple, reliable way to monitor spaces, manage vehicles, and keep your facility running smoothly."
@@ -56,7 +56,7 @@
             <ImageView fx:id="logoView" fitWidth="48.0" fitHeight="48.0" preserveRatio="true"
                        managed="false" visible="false"/>
 
-            <Label text="Welcome back" styleClass="login-form-title"/>
+            <Label text="Welcome back." styleClass="login-form-title"/>
             <Label text="Sign in to your account" styleClass="login-form-subtitle"
                    style="-fx-padding: 0 0 10 0;"/>
 
@@ -78,7 +78,7 @@
                 <CheckBox fx:id="showPasswordCheck" text="Show password" styleClass="login-check-v2"/>
             </VBox>
 
-            <Button text="Log In" onAction="#onLoginClick" styleClass="login-button-v2"
+            <Button text="Sign in" onAction="#onLoginClick" styleClass="login-button-v2"
                     maxWidth="Infinity" style="-fx-padding: 10 0 0 0;"/>
 
             <Label fx:id="messageLabel" styleClass="login-error-v2" wrapText="true" maxWidth="340.0"/>

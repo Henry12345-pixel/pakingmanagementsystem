@@ -17,10 +17,8 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar, staff">
-            <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true">
-                <image><Image url="@../logo.png"/></image>
-            </ImageView>
-            <Label text="Staff dashboard" styleClass="header-title"/>
+            <Label text="P" styleClass="brand-mark"/>
+            <Label text="Overview  /  Staff" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="welcomeLabel" styleClass="header-subtitle"/>
             <Button text="Logout" onAction="#onLogoutClick" styleClass="button-ghost"/>
@@ -30,10 +28,10 @@
     <center>
         <!-- The whole page scrolls if the window is made small. -->
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <VBox spacing="32.0" styleClass="page">
+            <VBox spacing="24.0" styleClass="page">
 
                 <!-- Stat cards -->
-                <HBox spacing="32.0">
+                <HBox spacing="18.0">
                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="stat-card" spacing="4">
                         <Label text="Total slots" styleClass="stat-label"/>
                         <Label fx:id="totalLabel" text="0" styleClass="stat-number"/>

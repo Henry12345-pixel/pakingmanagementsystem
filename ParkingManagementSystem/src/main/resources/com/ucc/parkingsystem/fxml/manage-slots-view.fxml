@@ -18,7 +18,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar">
             <Button text="Back" onAction="#onBackClick" styleClass="button-ghost"/>
-            <Label text="Manage parking slots" styleClass="header-title"/>
+            <Label text="Parking spaces" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
@@ -28,7 +28,7 @@
 
             <!-- Add form -->
             <VBox spacing="16.0" styleClass="form-panel">
-                <Label text="Add new slot" styleClass="field-label"/>
+                <Label text="Create parking space" styleClass="field-label"/>
 
                 <FlowPane hgap="28.0" vgap="20.0" rowValignment="BOTTOM">
                     <VBox spacing="8.0">

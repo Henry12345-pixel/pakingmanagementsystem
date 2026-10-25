@@ -16,7 +16,7 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar, staff">
-            <Label text="Record vehicle entry" styleClass="header-title"/>
+            <Label text="New vehicle entry" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="Close" onAction="#onCloseClick" styleClass="button-ghost"/>
         </HBox>
