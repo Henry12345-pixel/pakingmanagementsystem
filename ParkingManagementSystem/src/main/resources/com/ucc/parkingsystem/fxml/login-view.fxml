@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -21,7 +22,9 @@
         <VBox alignment="CENTER_LEFT" spacing="18.0" maxWidth="420.0" style="-fx-padding: 60;">
 
             <StackPane styleClass="login-hero-badge">
-                <Label text="P" styleClass="login-hero-badge-text"/>
+                <ImageView fitWidth="72" fitHeight="72" preserveRatio="true">
+                    <image><Image url="@../logo.png"/></image>
+                </ImageView>
             </StackPane>
 
             <Label text="PARKSPACE" styleClass="login-hero-title" wrapText="true"
@@ -68,14 +71,24 @@
 
             <VBox spacing="6.0">
                 <Label text="PASSWORD" styleClass="field-label-v2"/>
-                <StackPane>
+                <StackPane alignment="CENTER_RIGHT">
                     <PasswordField fx:id="passwordField" promptText="Enter your password"
-                                   onAction="#onLoginClick" styleClass="login-input-v2" prefHeight="46.0"/>
+                                   onAction="#onLoginClick" styleClass="login-input-v2, password-with-eye"
+                                   prefHeight="46.0" maxWidth="Infinity"/>
                     <TextField fx:id="passwordTextField" promptText="Enter your password"
-                               onAction="#onLoginClick" styleClass="login-input-v2" prefHeight="46.0"
-                               visible="false" managed="false"/>
+                               onAction="#onLoginClick" styleClass="login-input-v2, password-with-eye"
+                               prefHeight="46.0" maxWidth="Infinity" visible="false" managed="false"/>
+                    <Button fx:id="showPasswordButton" onAction="#onTogglePassword"
+                            styleClass="password-eye-button" focusTraversable="false"
+                            accessibleText="Show password" StackPane.alignment="CENTER_RIGHT">
+                        <StackPane.margin><Insets right="9.0"/></StackPane.margin>
+                        <graphic>
+                            <SVGPath fx:id="eyeIcon"
+                                     content="M1 9 C4 3 12 3 15 9 C12 15 4 15 1 9 Z M8 6 A3 3 0 1 0 8 12 A3 3 0 1 0 8 6 Z"
+                                     styleClass="password-eye-icon"/>
+                        </graphic>
+                    </Button>
                 </StackPane>
-                <CheckBox fx:id="showPasswordCheck" text="Show password" styleClass="login-check-v2"/>
             </VBox>
 
             <Button text="Sign in" onAction="#onLoginClick" styleClass="login-button-v2"

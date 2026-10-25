@@ -148,6 +148,7 @@ public class ManageSlotsController {
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete slot " + slot.getSlotNumber() + "?");
+        ThemeManager.styleDialog(confirm.getDialogPane());
         confirm.showAndWait();
 
         if (confirm.getResult() != ButtonType.OK) {

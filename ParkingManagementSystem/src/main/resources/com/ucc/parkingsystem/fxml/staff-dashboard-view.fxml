@@ -17,7 +17,7 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-bar, staff">
-            <Label text="P" styleClass="brand-mark"/>
+
             <Label text="Overview  /  Staff" styleClass="header-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="welcomeLabel" styleClass="header-subtitle"/>

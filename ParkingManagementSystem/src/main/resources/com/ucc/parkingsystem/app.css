@@ -604,27 +604,96 @@
 .dialog-pane > .content { -fx-background-color: #172239; }
 .dialog-pane .label { -fx-text-fill: #e6edfa; }
 
-
-
-.password-with-eye {
-    -fx-padding: 0 47 0 14;
-}
-
+/* Eye control embedded in the password field */
+.password-with-eye { -fx-padding: 0 47 0 14; }
 .password-eye-button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
     -fx-padding: 8;
     -fx-min-width: 34;
     -fx-min-height: 34;
     -fx-cursor: hand;
 }
+.password-eye-button:hover { -fx-background-color: #293e60; }
+.password-eye-button:focused { -fx-border-color: transparent; }
+.password-eye-icon { -fx-fill: #b4c5df; -fx-stroke: #b4c5df; -fx-stroke-width: 0.8; }
 
-.password-eye-button:hover {
-    -fx-background-color: #293e60;
-}
 
-.password-eye-icon {
-    -fx-fill: #b4c5df;
-    -fx-stroke: #b4c5df;
-    -fx-stroke-width: 0.8;
+/* ===================================================================
+   Global theme switch - DARK is the default, LIGHT is an opt-in override.
+   Every scene root and popup DialogPane receives theme-light/theme-dark.
+   =================================================================== */
+.theme-toggle { -fx-padding: 8 14; -fx-font-size: 12px; -fx-font-weight: bold; }
+.login-theme-toggle { -fx-background-color: #263b5c; -fx-text-fill: white; }
+.password-with-eye { -fx-padding: 0 47 0 14; }
+.password-eye-button { -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 8; -fx-min-width: 34; -fx-min-height: 34; -fx-cursor: hand; }
+.password-eye-icon { -fx-fill: #b4c5df; -fx-stroke: #b4c5df; -fx-stroke-width: 0.8; }
+
+.theme-light {
+    -fx-ink: #14233d; -fx-muted: #62718a; -fx-line: #e0e8f4;
+    -fx-line-strong: #cbd7e8; -fx-paper: #f5f8fd;
+    -fx-surface: #ffffff; -fx-hover: #edf4ff;
+    -fx-selected: #dceaff; -fx-brand: #225fe8;
+    -fx-brand-hover: #174cc5; -fx-brand-soft: #eaf1ff;
+    -fx-ok: #087f61; -fx-bad: #cb3b52; -fx-bad-soft: #fff0f2;
+    -fx-background-color: -fx-paper;
+    -fx-accent: -fx-brand; -fx-focus-color: -fx-brand;
 }
+.theme-light .label { -fx-text-fill: -fx-ink; }
+.theme-light .header-bar { -fx-background-color: white; -fx-border-color: transparent transparent #e2e9f5 transparent; }
+.theme-light .header-title { -fx-text-fill: #14233d; }
+.theme-light .header-subtitle { -fx-text-fill: #61728c; }
+.theme-light .button { -fx-background-color: white; -fx-text-fill: #1c3353; -fx-border-color: #d6e0ee; }
+.theme-light .button:hover { -fx-background-color: #edf4ff; }
+.theme-light .button-primary, .theme-light .button:default { -fx-background-color: #225fe8; -fx-text-fill: white; -fx-border-color: transparent; }
+.theme-light .button-primary:hover, .theme-light .button:default:hover { -fx-background-color: #174cc5; }
+.theme-light .button-danger { -fx-background-color: #fff0f2; -fx-text-fill: #bc2e4a; -fx-border-color: #f3bdc9; }
+.theme-light .button-outline { -fx-background-color: #eef4ff; -fx-text-fill: #225fe8; -fx-border-color: #c9dcff; }
+.theme-light .button-ghost { -fx-background-color: transparent; -fx-text-fill: #264269; -fx-border-color: #d2ddec; }
+.theme-light .stat-card, .theme-light .form-panel { -fx-background-color: white; -fx-border-color: #e0e8f4; }
+.theme-light .stat-label { -fx-text-fill: #65758f; }
+.theme-light .stat-number { -fx-text-fill: #14233d; }
+.theme-light .stat-card-available .stat-number { -fx-text-fill: #078460; }
+.theme-light .stat-card-occupied .stat-number { -fx-text-fill: #c7435a; }
+.theme-light .field-label, .theme-light .group-title { -fx-text-fill: #293d5a; }
+.theme-light .text-field, .theme-light .password-field, .theme-light .choice-box, .theme-light .text-area {
+    -fx-background-color: white; -fx-text-fill: #172b46; -fx-prompt-text-fill: #8a99ad; -fx-border-color: #cbd8e9;
+}
+.theme-light .choice-box .label { -fx-text-fill: #172b46; }
+.theme-light .choice-box .context-menu { -fx-background-color: white; }
+.theme-light .choice-box .menu-item:focused { -fx-background-color: #e5efff; }
+.theme-light .check-box { -fx-text-fill: #293d5a; }
+.theme-light .scroll-pane, .theme-light .scroll-pane > .viewport { -fx-background-color: #f5f8fd; }
+.theme-light .table-view { -fx-background-color: white; -fx-border-color: #dfe8f4; }
+.theme-light .table-view .column-header-background { -fx-background-color: #eef3fb; }
+.theme-light .table-view .column-header .label { -fx-text-fill: #435672; }
+.theme-light .table-cell { -fx-text-fill: #243b58; }
+.theme-light .table-row-cell { -fx-background-color: white; -fx-border-color: transparent transparent #e6edf6 transparent; }
+.theme-light .table-row-cell:odd { -fx-background-color: #f8faff; }
+.theme-light .table-row-cell:hover { -fx-background-color: #eaf2ff; }
+.theme-light .table-row-cell:selected { -fx-background-color: #c8dcff; }
+.theme-light .table-row-cell:selected .table-cell { -fx-text-fill: #123763; }
+.theme-light .titled-pane > .title { -fx-background-color: #edf3fc; -fx-border-color: #d5e1f1; }
+.theme-light .titled-pane > .title:hover { -fx-background-color: #e2edfd; }
+.theme-light .titled-pane > .title > .arrow-button > .arrow { -fx-background-color: #28569c; }
+.theme-light .titled-pane > .content { -fx-background-color: white; -fx-border-color: #dbe5f3; }
+.theme-light .badge-available, .theme-light .status-available, .theme-light .message-success { -fx-text-fill: #087f61; }
+.theme-light .badge-occupied, .theme-light .status-occupied, .theme-light .message-error { -fx-text-fill: #c7435a; }
+.theme-light .message-muted { -fx-text-fill: #63758f; }
+.theme-light.login-root { -fx-background-color: #f5f8fd; }
+.theme-light .login-hero { -fx-background-color: linear-gradient(to bottom right, #2365eb, #133c9e); }
+.theme-light .login-hero-title { -fx-text-fill: white; }
+.theme-light .login-hero-subtitle, .theme-light .login-hero-feature { -fx-text-fill: #e5eeff; }
+.theme-light .login-form-panel { -fx-background-color: #ffffff; }
+.theme-light .login-form-title { -fx-text-fill: #13243e; }
+.theme-light .login-form-subtitle, .theme-light .field-label-v2 { -fx-text-fill: #526785; }
+.theme-light .login-input-v2 { -fx-background-color: #f9fbff; -fx-text-fill: #172b46; -fx-prompt-text-fill: #8a99ad; -fx-border-color: #cbd8e9; }
+.theme-light .login-input-v2:focused { -fx-background-color: white; -fx-border-color: #3879ee; }
+.theme-light .login-button-v2 { -fx-background-color: #225fe8; -fx-text-fill: white; }
+.theme-light .login-error-v2 { -fx-text-fill: #c7435a; }
+.theme-light.dialog-pane { -fx-background-color: white; }
+.theme-light.dialog-pane > .header-panel, .theme-light.dialog-pane > .content { -fx-background-color: white; }
+.theme-light.dialog-pane .label { -fx-text-fill: #203752; }
+.theme-light .password-eye-icon { -fx-fill: #657997; -fx-stroke: #657997; }

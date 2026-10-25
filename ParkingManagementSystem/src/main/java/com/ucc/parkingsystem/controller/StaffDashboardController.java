@@ -169,6 +169,7 @@ public class StaffDashboardController {
     private void handleExitClick(ParkingSlot slot) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Record exit for " + slot.getPlateNumber() + " (slot " + slot.getSlotNumber() + ")?");
+        ThemeManager.styleDialog(confirm.getDialogPane());
         confirm.showAndWait();
 
         if (confirm.getResult() != ButtonType.OK) {

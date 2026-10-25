@@ -29,7 +29,7 @@ public class Navigator {
 
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(FXML_FOLDER + fxmlFile));
         Scene scene = new Scene(loader.load(), width, height);
-        scene.getStylesheets().add(Navigator.class.getResource(STYLESHEET).toExternalForm());
+        ThemeManager.install(scene);
 
         stage.setTitle(title);
         stage.setScene(scene);
@@ -45,6 +45,7 @@ public class Navigator {
         if (user == null || !user.isAdmin()) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Access denied. This screen is for Admin only.");
+            ThemeManager.styleDialog(alert.getDialogPane());
             alert.showAndWait();
             return;
         }
@@ -57,7 +58,7 @@ public class Navigator {
     public static void openPopup(Node ownerNode, String fxmlFile, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(FXML_FOLDER + fxmlFile));
         Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Navigator.class.getResource(STYLESHEET).toExternalForm());
+        ThemeManager.install(scene);
 
         Stage popup = new Stage();
         popup.initOwner(ownerNode.getScene().getWindow());
@@ -71,6 +72,7 @@ public class Navigator {
     // keeping the window maximized.
     public static void logout(Node currentNode) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to log out?");
+        ThemeManager.styleDialog(confirm.getDialogPane());
         confirm.showAndWait();
 
         if (confirm.getResult() != ButtonType.OK) {
@@ -86,7 +88,7 @@ public class Navigator {
             FXMLLoader loader = new FXMLLoader(
                     Navigator.class.getResource(FXML_FOLDER + "login-view.fxml"));
             Scene scene = new Scene(loader.load(), 400, 450);
-            scene.getStylesheets().add(Navigator.class.getResource(STYLESHEET).toExternalForm());
+            ThemeManager.install(scene);
 
             stage.setTitle("Parking Management System - Login");
             stage.setScene(scene);
@@ -100,7 +102,7 @@ public class Navigator {
 
     // Applies the app's stylesheet to a dialog's content pane, so popups match the app's look.
     public static void styleDialog(DialogPane dialogPane) {
-        dialogPane.getStylesheets().add(Navigator.class.getResource(STYLESHEET).toExternalForm());
+        ThemeManager.styleDialog(dialogPane);
     }
 
     // Central place that actually sets the maximize state after a scene change.
