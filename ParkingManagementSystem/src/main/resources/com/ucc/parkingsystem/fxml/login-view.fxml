@@ -1,100 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
-<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.ucc.parkingsystem.controller.LoginController"
       styleClass="login-root">
 
-    <!-- LEFT: hero / branding panel -->
-    <StackPane styleClass="login-hero" HBox.hgrow="ALWAYS" minWidth="360.0">
-        <VBox alignment="CENTER_LEFT" spacing="18.0" maxWidth="420.0" style="-fx-padding: 60;">
+    <!-- LEFT SIDE: LOGO AND BRANDING -->
+    <StackPane styleClass="login-hero"
+               HBox.hgrow="ALWAYS"
+               minWidth="360.0">
 
-            <StackPane styleClass="login-hero-badge">
-                <ImageView fitWidth="72" fitHeight="72" preserveRatio="true">
-                    <image><Image url="@../logo.png"/></image>
-                </ImageView>
-            </StackPane>
+        <VBox alignment="CENTER"
+              spacing="20.0"
+              maxWidth="420.0"
+              style="-fx-padding: 60;">
 
-            <Label text="PARKSPACE" styleClass="login-hero-title" wrapText="true"
-                   style="-fx-padding: 16 0 0 0;"/>
+            <!-- MAIN LOGO -->
+            <ImageView fitWidth="220.0"
+                       fitHeight="220.0"
+                       preserveRatio="true"
+                       smooth="true">
 
-            <Label text="A simple, reliable way to monitor spaces, manage vehicles, and keep your facility running smoothly."
-                   styleClass="login-hero-subtitle" wrapText="true" style="-fx-padding: 0 0 10 0;"/>
+                <image>
+                    <Image url="@../logo.png"/>
+                </image>
 
-            <VBox spacing="10.0" style="-fx-padding: 14 0 0 0;">
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <StackPane styleClass="login-hero-dot"/>
-                    <Label text="Real-time slot availability" styleClass="login-hero-feature"/>
-                </HBox>
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <StackPane styleClass="login-hero-dot"/>
-                    <Label text="Entry and exit tracking" styleClass="login-hero-feature"/>
-                </HBox>
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <StackPane styleClass="login-hero-dot"/>
-                    <Label text="Role-based staff and admin access" styleClass="login-hero-feature"/>
-                </HBox>
-            </VBox>
+            </ImageView>
+
+            <!-- SYSTEM NAME -->
+            <Label text="PARKSPACE"
+                   styleClass="login-hero-title"
+                   wrapText="true"
+                   alignment="CENTER"/>
+
         </VBox>
+
     </StackPane>
 
-    <!-- RIGHT: login form panel -->
-    <StackPane styleClass="login-form-panel" HBox.hgrow="ALWAYS" minWidth="420.0" alignment="CENTER">
+    <!-- RIGHT SIDE: LOGIN FORM -->
+    <StackPane styleClass="login-form-panel"
+               HBox.hgrow="ALWAYS"
+               minWidth="420.0"
+               alignment="CENTER">
 
-        <VBox fx:id="loginCard" alignment="CENTER_LEFT" spacing="12.0" maxWidth="340.0" prefWidth="340.0">
+        <VBox fx:id="loginCard"
+              alignment="CENTER_LEFT"
+              spacing="12.0"
+              maxWidth="340.0"
+              prefWidth="340.0">
 
-            <!-- Fallback icon badge: shown unless a real logo.png loads successfully -->
-            <ImageView fx:id="logoView" fitWidth="48.0" fitHeight="48.0" preserveRatio="true"
-                       managed="false" visible="false"/>
+            <!-- COMPATIBILITY WITH LOGIN CONTROLLER -->
+            <ImageView fx:id="logoView"
+                       fitWidth="1.0"
+                       fitHeight="1.0"
+                       preserveRatio="true"
+                       visible="false"
+                       managed="false"/>
 
-            <Label text="Welcome back." styleClass="login-form-title"/>
-            <Label text="Sign in to your account" styleClass="login-form-subtitle"
+            <!-- WELCOME -->
+            <Label text="Welcome back."
+                   styleClass="login-form-title"/>
+
+            <Label text="Sign in to your account"
+                   styleClass="login-form-subtitle"
                    style="-fx-padding: 0 0 10 0;"/>
 
+            <!-- USERNAME -->
             <VBox spacing="6.0">
-                <Label text="USERNAME" styleClass="field-label-v2"/>
-                <TextField fx:id="usernameField" promptText="Enter your username"
-                           styleClass="login-input-v2" prefHeight="46.0"/>
+
+                <Label text="USERNAME"
+                       styleClass="field-label-v2"/>
+
+                <TextField fx:id="usernameField"
+                           promptText="Enter your username"
+                           styleClass="login-input-v2"
+                           prefHeight="46.0"/>
+
             </VBox>
 
+            <!-- PASSWORD -->
             <VBox spacing="6.0">
-                <Label text="PASSWORD" styleClass="field-label-v2"/>
+
+                <Label text="PASSWORD"
+                       styleClass="field-label-v2"/>
+
                 <StackPane alignment="CENTER_RIGHT">
-                    <PasswordField fx:id="passwordField" promptText="Enter your password"
-                                   onAction="#onLoginClick" styleClass="login-input-v2, password-with-eye"
-                                   prefHeight="46.0" maxWidth="Infinity"/>
-                    <TextField fx:id="passwordTextField" promptText="Enter your password"
-                               onAction="#onLoginClick" styleClass="login-input-v2, password-with-eye"
-                               prefHeight="46.0" maxWidth="Infinity" visible="false" managed="false"/>
-                    <Button fx:id="showPasswordButton" onAction="#onTogglePassword"
-                            styleClass="password-eye-button" focusTraversable="false"
-                            accessibleText="Show password" StackPane.alignment="CENTER_RIGHT">
-                        <StackPane.margin><Insets right="9.0"/></StackPane.margin>
+
+                    <!-- HIDDEN PASSWORD -->
+                    <PasswordField
+                            fx:id="passwordField"
+                            promptText="Enter your password"
+                            onAction="#onLoginClick"
+                            styleClass="login-input-v2, password-with-eye"
+                            prefHeight="46.0"
+                            maxWidth="Infinity"/>
+
+                    <!-- VISIBLE PASSWORD -->
+                    <TextField
+                            fx:id="passwordTextField"
+                            promptText="Enter your password"
+                            onAction="#onLoginClick"
+                            styleClass="login-input-v2, password-with-eye"
+                            prefHeight="46.0"
+                            maxWidth="Infinity"
+                            visible="false"
+                            managed="false"/>
+
+                    <!-- EYE TOGGLE -->
+                    <Button
+                            fx:id="showPasswordButton"
+                            onAction="#onTogglePassword"
+                            styleClass="password-eye-button"
+                            focusTraversable="false"
+                            accessibleText="Show password"
+                            StackPane.alignment="CENTER_RIGHT">
+
+                        <StackPane.margin>
+                            <Insets right="9.0"/>
+                        </StackPane.margin>
+
                         <graphic>
-                            <SVGPath fx:id="eyeIcon"
-                                     content="M1 9 C4 3 12 3 15 9 C12 15 4 15 1 9 Z M8 6 A3 3 0 1 0 8 12 A3 3 0 1 0 8 6 Z"
-                                     styleClass="password-eye-icon"/>
+                            <SVGPath
+                                    fx:id="eyeIcon"
+                                    content="M1 9 C4 3 12 3 15 9 C12 15 4 15 1 9 Z M8 6 A3 3 0 1 0 8 12 A3 3 0 1 0 8 6 Z"
+                                    styleClass="password-eye-icon"/>
                         </graphic>
+
                     </Button>
+
                 </StackPane>
+
             </VBox>
 
-            <Button text="Sign in" onAction="#onLoginClick" styleClass="login-button-v2"
-                    maxWidth="Infinity" style="-fx-padding: 10 0 0 0;"/>
+            <!-- SIGN IN BUTTON -->
+            <Button text="Sign in"
+                    onAction="#onLoginClick"
+                    styleClass="login-button-v2"
+                    maxWidth="Infinity"/>
 
-            <Label fx:id="messageLabel" styleClass="login-error-v2" wrapText="true" maxWidth="340.0"/>
+            <!-- ERROR MESSAGE -->
+            <Label fx:id="messageLabel"
+                   styleClass="login-error-v2"
+                   wrapText="true"
+                   maxWidth="340.0"/>
+
         </VBox>
+
     </StackPane>
+
 </HBox>
